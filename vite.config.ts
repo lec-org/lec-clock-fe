@@ -19,6 +19,7 @@ export default defineConfig({
       resolvers: [ArcoResolver()]
     }),
     Components({
+      dirs: ['src/components', 'src/views/**/components'],
       dts: path.resolve(__dirname, 'src/typings', 'components.d.ts'),
       resolvers: [ArcoResolver({ sideEffect: true })]
     })

@@ -8,7 +8,17 @@ export {}
 declare module 'vue' {
   export interface GlobalComponents {
     AButton: typeof import('@arco-design/web-vue')['Button']
+    AForm: typeof import('@arco-design/web-vue')['Form']
+    AFormItem: typeof import('@arco-design/web-vue')['FormItem']
+    AInput: typeof import('@arco-design/web-vue')['Input']
+    AInputPassword: typeof import('@arco-design/web-vue')['InputPassword']
     ASpace: typeof import('@arco-design/web-vue')['Space']
+    ATypography: typeof import('@arco-design/web-vue')['Typography']
+    ATypographyParagraph: typeof import('@arco-design/web-vue')['TypographyParagraph']
+    ATypographyTitle: typeof import('@arco-design/web-vue')['TypographyTitle']
+    LoginForm: typeof import('./../views/login/components/login-form.vue')['default']
+    LoginSlider: typeof import('./../views/login/components/login-slider.vue')['default']
+    RegisterForm: typeof import('./../views/login/components/register-form.vue')['default']
     RouterLink: typeof import('vue-router')['RouterLink']
     RouterView: typeof import('vue-router')['RouterView']
   }
