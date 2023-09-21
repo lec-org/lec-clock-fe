@@ -4,7 +4,7 @@
       <div class="login-form__container">
         <a-form
           class="login-form__content"
-          :model="form"
+          :model="loginInfo"
           @submit-success="handleSubmit"
         >
           <h2 class="login-form__title">lec 打卡系统</h2>
@@ -17,7 +17,7 @@
             ]"
           >
             <a-input
-              v-model="form.username"
+              v-model="loginInfo.username"
               placeholder="输入用户名..."
               :max-length="16"
             />
@@ -31,7 +31,7 @@
             ]"
           >
             <a-input-password
-              v-model="form.password"
+              v-model="loginInfo.password"
               placeholder="输入密码..."
               :max-length="20"
             />
@@ -51,16 +51,10 @@
 
 <script setup lang="ts">
 import { useLoginStore } from '../store/login'
-import { LoginInfo } from '../type'
 
 const loginStore = useLoginStore()
-const { activeForm } = storeToRefs(loginStore)
+const { activeForm, loginInfo } = storeToRefs(loginStore)
 const isActive = computed(() => activeForm.value === 'login')
-
-const form: LoginInfo = reactive({
-  username: '',
-  password: ''
-})
 
 // 这组件库类型标的有点nt
 const handleSubmit = (info: Record<string, any>) => {

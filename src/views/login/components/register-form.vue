@@ -4,7 +4,7 @@
       <div class="register-form__container">
         <a-form
           class="register-form__content"
-          :model="form"
+          :model="registerInfo"
           @submit-success="handleSubmit"
         >
           <h2 class="register-form__title">用户注册</h2>
@@ -17,7 +17,7 @@
             ]"
           >
             <a-input
-              v-model="form.username"
+              v-model="registerInfo.username"
               placeholder="输入用户名..."
               :max-length="16"
             />
@@ -28,7 +28,7 @@
             :rules="[{ required: true, message: '昵称是必填项' }]"
           >
             <a-input
-              v-model="form.nickname"
+              v-model="registerInfo.nickname"
               placeholder="输入昵称..."
               :max-length="8"
             />
@@ -42,7 +42,7 @@
             ]"
           >
             <a-input-password
-              v-model="form.password"
+              v-model="registerInfo.password"
               placeholder="输入密码..."
               :max-length="20"
               allow-clear
@@ -59,7 +59,7 @@
                     cb('确认密码是必填项')
                   } else if (value.length < 4 || value.length > 20) {
                     cb('密码填写不符合规范')
-                  } else if (value !== form.password) {
+                  } else if (value !== registerInfo.password) {
                     cb('两次密码填写不一致')
                   }
                 }
@@ -67,7 +67,7 @@
             ]"
           >
             <a-input-password
-              v-model="form.confirmPassword"
+              v-model="registerInfo.confirmPassword"
               placeholder="确认密码..."
               :max-length="20"
               allow-clear
@@ -88,18 +88,10 @@
 
 <script setup lang="ts">
 import { useLoginStore } from '../store/login'
-import { RegisterInfo } from '../type'
 
 const loginStore = useLoginStore()
-const { activeForm } = storeToRefs(loginStore)
+const { activeForm, registerInfo } = storeToRefs(loginStore)
 const isActive = computed(() => activeForm.value === 'register')
-
-const form: RegisterInfo = reactive({
-  username: '',
-  nickname: '',
-  password: '',
-  confirmPassword: ''
-})
 
 const handleSubmit = (info: Record<string, any>) => {
   console.log(info)
