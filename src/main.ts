@@ -5,7 +5,7 @@ import '@arco-design/web-vue/es/message/style/index.css'
 
 import App from './App.vue'
 import router from './router'
-import './style.css'
+import './style.scss'
 
 const app = createApp(App)
 const pinia = createPinia()

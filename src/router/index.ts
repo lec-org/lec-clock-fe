@@ -5,7 +5,15 @@ const router = createRouter({
   routes: [
     {
       path: '/',
+      redirect: '/login' // 后面改成往home跳转
+    },
+    {
+      path: '/home',
       component: () => import('@/views/HomeView.vue')
+    },
+    {
+      path: '/login',
+      component: () => import('@/views/LoginView.vue')
     }
   ]
 })
