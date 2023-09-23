@@ -1,17 +1,18 @@
 import axios, { AxiosRequestConfig, AxiosResponse, AxiosError } from 'axios'
+import { RequestResult } from './type'
 
 import { ResponseData } from './type'
 import { useLoginStore } from '../views/login/store/login'
 const instance = axios.create({
-  baseURL: 'http://58.87.105.56:8080',
+  baseURL: '/api',
   timeout: 5000
 })
 
 instance.interceptors.request.use(
   (config) => {
     // 添加逻辑
-    const useUser = useLoginStore()//在login/store
-    if(useUser.token){
+    const useUser = useLoginStore() //在login/store
+    if (useUser.token) {
       config.headers.Authorization = useUser.token
     }
     return config
@@ -41,7 +42,9 @@ instance.interceptors.response.use(
       case 'ERR_BAD_RESPONSE':
         return Promise.reject(new RequestError(code, '响应错误', response))
       default:
-        return Promise.reject(new RequestError('ERR_UNKNOWN', '未知错误', response))
+        return Promise.reject(
+          new RequestError('ERR_UNKNOWN', '未知错误', response)
+        )
     }
   }
 )
@@ -72,11 +75,6 @@ export class RequestError extends Error {
     this.status = response?.status
     this.name = 'RequestError'
   }
-}
-
-interface RequestResult<T> {
-  response?: ResponseData<T>
-  error?: RequestError
 }
 
 export const request = {

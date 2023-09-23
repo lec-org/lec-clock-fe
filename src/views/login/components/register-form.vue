@@ -48,47 +48,38 @@
               allow-clear
             />
           </a-form-item>
-          <a-form-item 
-            field="grade" 
+          <a-form-item
+            field="grade"
             label="年级"
-            :rules="[{required:true,message:'年级是必填项'}]"
+            :rules="[{ required: true, message: '年级是必填项' }]"
           >
-              <a-select  
-              placeholder="please select" 
-              v-model="registerInfo.grade"
-              >
-                <a-option value=1>1</a-option>
-                <a-option value=2>2</a-option>
-              </a-select>
-            </a-form-item>
+            <a-select placeholder="please select" v-model="registerInfo.grade">
+              <a-option value="1">1</a-option>
+              <a-option value="2">2</a-option>
+            </a-select>
+          </a-form-item>
           <a-form-item
             field="email"
             label="邮箱"
             :rules="[
               { required: true, message: '邮箱是必填项' },
-              { type: 'email', message: '邮箱格式不正确'}
+              { type: 'email', message: '邮箱格式不正确' }
             ]"
           >
             <a-input
               placeholder="邮箱是必填项"
               v-model="registerInfo.email"
             ></a-input>
-            <a-button
-              type="primary"
-              shape="round"
-              @click="sendEmail"
-            >发送验证码</a-button>
+            <a-button type="primary" shape="round" @click="sendEmail"
+              >发送验证码</a-button
+            >
           </a-form-item>
           <a-form-item
             field="code"
             label="验证码"
-            :rules="[{required:true,message:'验证码是必填项'}]"
+            :rules="[{ required: true, message: '验证码是必填项' }]"
           >
-            <a-input
-              placeholder="请输入邮箱验证码"
-              
-            ></a-input>
-            
+            <a-input placeholder="请输入邮箱验证码"></a-input>
           </a-form-item>
           <a-button
             class="register-form__submit"
@@ -105,25 +96,24 @@
 
 <script setup lang="ts">
 import { useLoginStore } from '../store/login'
-import { userRegisterService ,userCodeService } from '../../../services/type/index'
-import { Message } from '@arco-design/web-vue';
-import router from '@/router';
+import { userRegisterService, userCodeService } from '@/services'
+import { Message } from '@arco-design/web-vue'
+import router from '@/router'
 const loginStore = useLoginStore()
 const { activeForm, registerInfo } = storeToRefs(loginStore)
 const isActive = computed(() => activeForm.value === 'register')
 
-const handleSubmit = async(info: Record<string, any>) => {
+const handleSubmit = async (info: Record<string, any>) => {
   console.log(info)
   await userRegisterService(info)
   Message.success('注册成功')
   router.push('/')
 }
 
-const sendEmail = async() => {
-  console.log(registerInfo.value.email);
-  const res = await userCodeService(registerInfo.value.email)
-  console.log(res);
-  
+const sendEmail = async () => {
+  const { email } = unref(registerInfo)
+  const res = await userCodeService(email)
+  console.log(res)
 }
 </script>
 
@@ -176,17 +166,8 @@ const sendEmail = async() => {
 </style>
 
 function storeToRefs(loginStore: any): { activeForm: any; registerInfo: any } {
-  throw new Error('Function not implemented.')
-}
-
-function computed(arg0: () => boolean) {
-  throw new Error('Function not implemented.')
-}
-
-function storeToRefs(loginStore: any): { activeForm: any; registerInfo: any } {
-  throw new Error('Function not implemented.')
-}
-
-function computed(arg0: () => boolean) {
-  throw new Error('Function not implemented.')
-}
+throw new Error('Function not implemented.') } function computed(arg0: () =>
+boolean) { throw new Error('Function not implemented.') } function
+storeToRefs(loginStore: any): { activeForm: any; registerInfo: any } { throw new
+Error('Function not implemented.') } function computed(arg0: () => boolean) {
+throw new Error('Function not implemented.') }
