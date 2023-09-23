@@ -1,11 +1,11 @@
 import { createRouter, createWebHistory } from 'vue-router'
-
+import {useLoginStore} from '@/views/login/store/login'
 const router = createRouter({
   history: createWebHistory(),
   routes: [
     {
       path: '/',
-      redirect: '/login' // 后面改成往home跳转
+      redirect: '/home' // 后面改成往home跳转
     },
     {
       path: '/home',
@@ -16,6 +16,11 @@ const router = createRouter({
       component: () => import('@/views/login/login-view.vue')
     }
   ]
+})
+
+router.beforeEach((to) =>{
+  const userStore = useLoginStore()
+  if(!userStore.token && to.path !== '/login') return '/login'
 })
 
 export default router

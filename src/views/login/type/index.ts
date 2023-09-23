@@ -5,6 +5,7 @@ export interface LoginInfo {
 
 export interface RegisterInfo extends LoginInfo {
   nickname: string
-  confirmPassword: string
-  grade?: number
+  email: string
+  grade: number
+  code?:number
 }

@@ -1,15 +1,19 @@
 import axios, { AxiosRequestConfig, AxiosResponse, AxiosError } from 'axios'
 
 import { ResponseData } from './type'
-
+import { useLoginStore } from '../views/login/store/login'
 const instance = axios.create({
-  baseURL: '/api',
+  baseURL: 'http://58.87.105.56:8080',
   timeout: 5000
 })
 
 instance.interceptors.request.use(
   (config) => {
     // 添加逻辑
+    const useUser = useLoginStore()//在login/store
+    if(useUser.token){
+      config.headers.Authorization = useUser.token
+    }
     return config
   },
   (error) => {

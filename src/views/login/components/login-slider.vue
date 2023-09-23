@@ -6,7 +6,10 @@
         这里写一段描述但是我想不出来了
       </a-typography-paragraph>
     </a-typography>
-    <div class="login-slider__button" @click="changeActiveForm">注册</div>
+    <div class="login-slider__button" @click="changeActiveForm">
+      <template v-if="activeForm=='login'">注册</template>
+      <template v-else>登录</template>
+    </div>
   </div>
 </template>
 
