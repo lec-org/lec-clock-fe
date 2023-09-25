@@ -54,8 +54,8 @@
             :rules="[{ required: true, message: '年级是必填项' }]"
           >
             <a-select placeholder="please select" v-model="registerInfo.grade">
-              <a-option value="1">1</a-option>
-              <a-option value="2">2</a-option>
+              <a-option :value="1">油砖一年生</a-option>
+              <a-option :value="2">油砖二年生</a-option>
             </a-select>
           </a-form-item>
           <a-form-item
@@ -66,20 +66,17 @@
               { type: 'email', message: '邮箱格式不正确' }
             ]"
           >
-            <a-input
-              placeholder="邮箱是必填项"
-              v-model="registerInfo.email"
-            ></a-input>
-            <a-button type="primary" shape="round" @click="sendEmail"
-              >发送验证码</a-button
-            >
+            <a-input placeholder="邮箱是必填项" v-model="registerInfo.email" />
+            <a-button type="primary" shape="round" @click="sendEmail">
+              发送验证码
+            </a-button>
           </a-form-item>
           <a-form-item
             field="code"
             label="验证码"
             :rules="[{ required: true, message: '验证码是必填项' }]"
           >
-            <a-input placeholder="请输入邮箱验证码"></a-input>
+            <a-input placeholder="请输入邮箱验证码" />
           </a-form-item>
           <a-button
             class="register-form__submit"
