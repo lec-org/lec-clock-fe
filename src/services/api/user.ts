@@ -1,6 +1,8 @@
 import { request } from '@/services/request'
+import { transformFormData } from '@/util'
+
 //注册功能
-export const userRegisterService = ({
+export const userRegister = ({
   usertname,
   nickname,
   password,
@@ -17,9 +19,6 @@ export const userRegisterService = ({
 }
 
 //发送验证码功能
-export const userCodeService = (email: string) => {
-  const formData = new FormData()
-  formData.append('email', email)
-
-  return request.post('/user/register/sendCode', formData)
+export const userSendCode = (params: { email: string }) => {
+  return request.post('/user/register/sendCode', transformFormData(params))
 }

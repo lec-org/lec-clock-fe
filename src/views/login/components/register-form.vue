@@ -74,6 +74,7 @@
           <a-form-item
             field="code"
             label="验证码"
+            v-model="registerInfo.code"
             :rules="[{ required: true, message: '验证码是必填项' }]"
           >
             <a-input placeholder="请输入邮箱验证码" />
@@ -93,23 +94,28 @@
 
 <script setup lang="ts">
 import { useLoginStore } from '../store/login'
-import { userRegisterService, userCodeService } from '@/services'
+import { userRegister, userSendCode } from '@/services'
 import { Message } from '@arco-design/web-vue'
 import router from '@/router'
+
 const loginStore = useLoginStore()
 const { activeForm, registerInfo } = storeToRefs(loginStore)
 const isActive = computed(() => activeForm.value === 'register')
 
 const handleSubmit = async (info: Record<string, any>) => {
   console.log(info)
-  await userRegisterService(info)
-  Message.success('注册成功')
-  router.push('/')
+  const { error } = await userRegister(info)
+  if (error) {
+    Message.error(error.message)
+  } else {
+    Message.success('注册成功')
+    router.push('/')
+  }
 }
 
 const sendEmail = async () => {
   const { email } = unref(registerInfo)
-  const res = await userCodeService(email)
+  const res = await userSendCode({ email })
   console.log(res)
 }
 </script>
@@ -161,10 +167,3 @@ const sendEmail = async () => {
   opacity: 0;
 }
 </style>
-
-function storeToRefs(loginStore: any): { activeForm: any; registerInfo: any } {
-throw new Error('Function not implemented.') } function computed(arg0: () =>
-boolean) { throw new Error('Function not implemented.') } function
-storeToRefs(loginStore: any): { activeForm: any; registerInfo: any } { throw new
-Error('Function not implemented.') } function computed(arg0: () => boolean) {
-throw new Error('Function not implemented.') }
