@@ -1,11 +1,7 @@
-export interface LoginInfo {
-  username: string
-  password: string
-}
+import { UserLoginParams, UserRegisterParams } from '@/services/type'
 
-export interface RegisterInfo extends LoginInfo {
-  nickname: string
+export type LoginInfo = UserLoginParams
+
+export interface RegisterInfo extends UserRegisterParams {
   email: string
-  grade: number
-  code?: string
 }

@@ -1,8 +1,7 @@
 import axios, { AxiosRequestConfig, AxiosResponse, AxiosError } from 'axios'
-import { RequestResult } from './type'
+import { getToken } from '@/util'
+import { RequestResult, ResponseData } from './type'
 
-import { ResponseData } from './type'
-import { useLoginStore } from '../views/login/store/login'
 const instance = axios.create({
   baseURL: '/api',
   timeout: 5000
@@ -10,10 +9,9 @@ const instance = axios.create({
 
 instance.interceptors.request.use(
   (config) => {
-    // 添加逻辑
-    const useUser = useLoginStore() //在login/store
-    if (useUser.token) {
-      config.headers.Authorization = useUser.token
+    const token = getToken()
+    if (token) {
+      config.headers.Authorization = token
     }
     return config
   },
