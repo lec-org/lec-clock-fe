@@ -67,7 +67,12 @@
             ]"
           >
             <a-input placeholder="邮箱是必填项" v-model="registerInfo.email" />
-            <a-button type="primary" shape="round" @click="sendEmail">
+            <a-button
+              type="primary"
+              shape="round"
+              @click="sendEmail"
+              style="margin-left: 12px"
+            >
               发送验证码
             </a-button>
           </a-form-item>
