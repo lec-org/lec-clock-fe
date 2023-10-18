@@ -6,7 +6,10 @@
         这里写一段描述但是我想不出来了
       </a-typography-paragraph>
     </a-typography>
-    <div class="login-slider__button" @click="changeActiveForm">注册</div>
+    <div class="login-slider__button" @click="changeActiveForm">
+      <template v-if="activeForm == 'login'">注册</template>
+      <template v-else>登录</template>
+    </div>
   </div>
 </template>
 
@@ -28,7 +31,9 @@ const { changeActiveForm } = loginStore
   height: 100%;
   background: url('/src/assets/login.jpg') no-repeat;
   background-size: cover;
-  transition: right 0.6s ease-in-out, transform 0.6s ease-in-out;
+  transition:
+    right 0.6s ease-in-out,
+    transform 0.6s ease-in-out;
 
   @media screen and (min-width: 1280px) {
     width: 600px;

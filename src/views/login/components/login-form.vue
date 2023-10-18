@@ -1,48 +1,50 @@
 <template>
   <transition name="login-form">
     <div class="login-form" v-show="isActive">
+      <h1 class="login-form__title">乐程聚合平台</h1>
       <div class="login-form__container">
         <a-form
           class="login-form__content"
           :model="loginInfo"
           @submit-success="handleSubmit"
         >
-          <h2 class="login-form__title">lec 打卡系统</h2>
-          <a-form-item
-            field="username"
-            label="用户名"
-            :rules="[
-              { required: true, message: '用户名是必填项' },
-              { minLength: 4, maxLength: 16, message: '用户名至少4位' }
-            ]"
-          >
-            <a-input
-              v-model="loginInfo.username"
-              placeholder="输入用户名..."
-              :max-length="16"
-            />
-          </a-form-item>
-          <a-form-item
-            field="password"
-            label="密码"
-            :rules="[
-              { required: true, message: '密码是必填项' },
-              { minLength: 6, maxLength: 20, message: '密码至少6位' }
-            ]"
-          >
-            <a-input-password
-              v-model="loginInfo.password"
-              placeholder="输入密码..."
-              :max-length="20"
-            />
-          </a-form-item>
-          <a-button
-            class="login-form__submit"
-            type="primary"
-            html-type="submit"
-          >
-            登录
-          </a-button>
+          <a-space class="board" direction="vertical" size="large">
+            <a-form-item
+              field="username"
+              label="用户名"
+              :rules="[
+                { required: true, message: '用户名是必填项' },
+                { minLength: 4, maxLength: 16, message: '用户名至少4位' }
+              ]"
+            >
+              <a-input
+                v-model="loginInfo.username"
+                placeholder="输入用户名..."
+                :max-length="16"
+              />
+            </a-form-item>
+            <a-form-item
+              field="password"
+              label="密码"
+              :rules="[
+                { required: true, message: '密码是必填项' },
+                { minLength: 6, maxLength: 20, message: '密码至少6位' }
+              ]"
+            >
+              <a-input-password
+                v-model="loginInfo.password"
+                placeholder="输入密码..."
+                :max-length="20"
+              />
+            </a-form-item>
+            <a-button
+              class="login-form__submit"
+              type="primary"
+              html-type="submit"
+            >
+              登录
+            </a-button>
+          </a-space>
         </a-form>
       </div>
     </div>
@@ -51,14 +53,20 @@
 
 <script setup lang="ts">
 import { useLoginStore } from '../store/login'
+import { userLoginService } from '@/services'
+import { Message } from '@arco-design/web-vue'
+import router from '@/router'
 
 const loginStore = useLoginStore()
 const { activeForm, loginInfo } = storeToRefs(loginStore)
 const isActive = computed(() => activeForm.value === 'login')
 
 // 这组件库类型标的有点nt
-const handleSubmit = (info: Record<string, any>) => {
-  console.log('success', info)
+const handleSubmit = async (info: Record<string, any>) => {
+  const res = await userLoginService(info)
+  loginStore.setToken(res.response.data.token)
+  Message.success('登陆成功')
+  router.push('/home')
 }
 </script>
 
@@ -67,7 +75,7 @@ const handleSubmit = (info: Record<string, any>) => {
   height: 100%;
   position: absolute;
   top: 0;
-  left: 0;
+  right: 100px;
 
   &__container {
     display: flex;
@@ -80,12 +88,29 @@ const handleSubmit = (info: Record<string, any>) => {
   }
 
   &__content {
+    position: absolute;
+    left: 96px;
     width: 420px;
+    height: 400px;
+    .board {
+      /* display: flex; */
+      /* flex-direction: column; */
+      /* justify-content: center; */
+      min-height: 400px;
+      padding: 24px 32px;
+      border-radius: 36px;
+      background-color: #fff;
+    }
   }
 
   &__title {
+    position: absolute;
+    top: 0px;
+    font-size: 72px;
+    left: 32px;
+    width: 100%;
+    color: #fff;
     text-align: center;
-    margin-bottom: 24px;
   }
 
   &__submit {

@@ -2,16 +2,19 @@
   <div class="login">
     <login-form />
     <register-form />
-    <login-slider />
+    <login-background></login-background>
+    <!-- <login-slider /> -->
   </div>
 </template>
 
 <script setup lang="ts"></script>
 
-<style lang="scss">
+<style lang="scss" scoped>
 .login {
-  position: relative;
-  overflow: hidden;
+  position: fixed;
+  left: 0;
+  height: 0;
   height: 100vh;
+  width: 100vw;
 }
 </style>

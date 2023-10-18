@@ -2,6 +2,7 @@ import { createApp } from 'vue'
 import { createPinia } from 'pinia'
 import { Message } from '@arco-design/web-vue';
 import '@arco-design/web-vue/es/message/style/index.css'
+import persist from 'pinia-plugin-persist'
 
 import App from './App.vue'
 import router from './router'

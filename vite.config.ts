@@ -31,6 +31,13 @@ export default defineConfig({
   },
   server: {
     // host: '0.0.0.0', 需要局域网连接时启用
-    port: 4000
+    port: 4000,
+    proxy: {
+      '/api': {
+        target: 'http://58.87.105.56:8080',
+        rewrite: (path) => path.replace(/^\/api/, ''),
+        changeOrigin: true
+      }
+    }
   }
 })

@@ -1,7 +1,8 @@
 import axios, { AxiosRequestConfig, AxiosResponse, AxiosError } from 'axios'
+import { RequestResult } from './type'
 
 import { ResponseData } from './type'
-
+import { useLoginStore } from '../views/login/store/login'
 const instance = axios.create({
   baseURL: '/api',
   timeout: 5000
@@ -10,6 +11,10 @@ const instance = axios.create({
 instance.interceptors.request.use(
   (config) => {
     // 添加逻辑
+    const useUser = useLoginStore() //在login/store
+    if (useUser.token) {
+      config.headers.Authorization = useUser.token
+    }
     return config
   },
   (error) => {
@@ -37,7 +42,9 @@ instance.interceptors.response.use(
       case 'ERR_BAD_RESPONSE':
         return Promise.reject(new RequestError(code, '响应错误', response))
       default:
-        return Promise.reject(new RequestError('ERR_UNKNOWN', '未知错误', response))
+        return Promise.reject(
+          new RequestError('ERR_UNKNOWN', '未知错误', response)
+        )
     }
   }
 )
@@ -70,14 +77,11 @@ export class RequestError extends Error {
   }
 }
 
-interface RequestResult<T> {
-  response?: ResponseData<T>
-  error?: RequestError
-}
-
 export const request = {
   async get<T = any>(url: string, config?: AxiosRequestConfig) {
-    const result: RequestResult<T> = {}
+    const result: RequestResult<T> = {
+      data: undefined
+    }
 
     try {
       const res = await instance.get<ResponseData<T>>(url, config)
@@ -89,7 +93,9 @@ export const request = {
     return result
   },
   async post<T = any>(url: string, data?: any, config?: AxiosRequestConfig) {
-    const result: RequestResult<T> = {}
+    const result: RequestResult<T> = {
+      data: undefined
+    }
 
     try {
       const res = await instance.post<ResponseData<T>>(url, data, config)
