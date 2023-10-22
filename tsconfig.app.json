@@ -8,6 +8,7 @@
     "verbatimModuleSyntax": false,
     "paths": {
       "@/*": ["./src/*"]
-    }
+    },
+    "moduleResolution": "Node"
   }
 }
