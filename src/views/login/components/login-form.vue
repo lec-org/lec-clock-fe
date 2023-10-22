@@ -1,7 +1,6 @@
 <template>
   <transition name="login-form">
     <div class="login-form" v-show="isActive">
-      <h1 class="login-form__title">乐程聚合平台</h1>
       <div class="login-form__container">
         <a-form
           class="login-form__content"
@@ -65,7 +64,7 @@ const isActive = computed(() => activeForm.value === 'login')
 const handleSubmit = async (info: Record<string, any>) => {
   const res = await userLoginService(info)
   loginStore.setToken(res.response.data.token)
-  Message.success('登陆成功')
+  Message.success('登录成功')
   router.push('/home')
 }
 </script>
@@ -101,16 +100,6 @@ const handleSubmit = async (info: Record<string, any>) => {
       border-radius: 36px;
       background-color: #fff;
     }
-  }
-
-  &__title {
-    position: absolute;
-    top: 0px;
-    font-size: 72px;
-    left: 32px;
-    width: 100%;
-    color: #fff;
-    text-align: center;
   }
 
   &__submit {
