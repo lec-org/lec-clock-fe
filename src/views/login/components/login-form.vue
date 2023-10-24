@@ -1,53 +1,65 @@
 <template>
-  <transition name="login-form">
-    <div class="login-form" v-show="isActive">
-      <div class="login-form__container">
-        <a-form
-          class="login-form__content"
-          :model="loginInfo"
-          @submit-success="handleSubmit"
-        >
-          <a-space class="board" direction="vertical" size="large">
-            <a-form-item
-              field="username"
-              label="用户名"
-              :rules="[
-                { required: true, message: '用户名是必填项' },
-                { minLength: 4, maxLength: 16, message: '用户名至少4位' }
-              ]"
-            >
-              <a-input
-                v-model="loginInfo.username"
-                placeholder="输入用户名..."
-                :max-length="16"
-              />
-            </a-form-item>
-            <a-form-item
-              field="password"
-              label="密码"
-              :rules="[
-                { required: true, message: '密码是必填项' },
-                { minLength: 6, maxLength: 20, message: '密码至少6位' }
-              ]"
-            >
-              <a-input-password
-                v-model="loginInfo.password"
-                placeholder="输入密码..."
-                :max-length="20"
-              />
-            </a-form-item>
-            <a-button
-              class="login-form__submit"
-              type="primary"
-              html-type="submit"
-            >
-              登录
-            </a-button>
+  <div class="login-form" v-show="isActive">
+    <div class="login-form__container">
+      <a-form
+        class="login-form__content"
+        :model="loginInfo"
+        @submit-success="handleSubmit"
+        layout="vertical"
+      >
+        <a-space class="board" direction="vertical">
+          <h2 class="title">欢迎回来</h2>
+
+          <a-form-item
+            field="username"
+            label="用户名"
+            :rules="[
+              { required: true, message: '用户名是必填项' },
+              { minLength: 4, maxLength: 16, message: '用户名至少4位' }
+            ]"
+          >
+            <a-input
+              v-model="loginInfo.username"
+              placeholder="输入用户名..."
+              :max-length="16"
+            />
+          </a-form-item>
+
+          <a-form-item
+            field="password"
+            label="密码"
+            :rules="[
+              { required: true, message: '密码是必填项' },
+              { minLength: 6, maxLength: 20, message: '密码至少6位' }
+            ]"
+          >
+            <a-input-password
+              v-model="loginInfo.password"
+              placeholder="输入密码..."
+              :max-length="20"
+            />
+          </a-form-item>
+
+          <a-form-item class="remember-check" field="isRemembered">
+            <a-checkbox v-model="isRemembered">记住我</a-checkbox>
+          </a-form-item>
+
+          <a-button
+            class="login-form__submit"
+            type="primary"
+            html-type="submit"
+          >
+            登录
+          </a-button>
+
+          <a-space class="register">
+            <div>没有账号?</div>
+            <a-link @click="checkToRegister">注册一个!</a-link>
           </a-space>
-        </a-form>
-      </div>
+        </a-space>
+      </a-form>
     </div>
-  </transition>
+  </div>
 </template>
 
 <script setup lang="ts">
@@ -59,14 +71,16 @@ import router from '@/router'
 const loginStore = useLoginStore()
 const { activeForm, loginInfo } = storeToRefs(loginStore)
 const isActive = computed(() => activeForm.value === 'login')
+const isRemembered = ref(false)
 
-// 这组件库类型标的有点nt
 const handleSubmit = async (info: Record<string, any>) => {
   const res = await userLoginService(info)
-  loginStore.setToken(res.response.data.token)
+  loginStore.setToken(res.response?.data.token)
   Message.success('登录成功')
   router.push('/home')
 }
+
+const checkToRegister = () => {}
 </script>
 
 <style lang="scss">
@@ -99,13 +113,29 @@ const handleSubmit = async (info: Record<string, any>) => {
       padding: 24px 32px;
       border-radius: 36px;
       background-color: #fff;
+      box-shadow: 2px 10px 20px #333e;
+
+      .title {
+        text-align: center;
+        font-weight: 600;
+        margin-bottom: 12px;
+      }
+
+      .remember-check {
+        /* transform: translateY(-24px); */
+        margin-top: -24px;
+      }
+
+      .register {
+        width: 100%;
+        display: flex;
+        justify-content: center;
+      }
     }
   }
 
   &__submit {
-    display: block;
-    width: fit-content;
-    margin: auto;
+    width: 100%;
   }
 }
 

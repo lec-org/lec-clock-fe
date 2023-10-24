@@ -28,40 +28,26 @@ import { ref, onMounted } from 'vue'
 const modelRef = ref()
 
 onMounted(() => {
-  const { scene, camera, mountTo, addControls } = lec3d.init({})
+  const { scene, camera, mountTo, addControls } = lec3d.init()
   camera.position.set(-10, 1, 1000)
   camera.lookAt(0, 0, 0)
-
-  const defaultY = -120
-
+  addControls()
   lec3d.loadGLTF({
-    modelPath: 'models/languages/scene.gltf',
+    modelPath: 'models/planet/scene.gltf',
     options: {
-      scale: 80,
+      scale: 400,
       position: {
-        x: -300,
-        y: defaultY,
+        x: 0,
+        y: 0,
         z: 0
       }
     },
     callback: (_: unknown, model: any) => {
-      let deltaValue = 0.001
-      const shakingAnimation = () => {
-        model.position.y += deltaValue
-        model.position.x += deltaValue
-        model.rotation.y += 0.05 * deltaValue
-        model.rotation.z += 0.1 * deltaValue
-        model.rotation.x += 0.2 * deltaValue
-
-        if (
-          model.position.y >= defaultY + 0.5 ||
-          model.position.y <= defaultY - 0.5
-        ) {
-          deltaValue = -deltaValue
-        }
-        requestAnimationFrame(shakingAnimation)
+      const playAnimation = () => {
+        model.rotation.y += 0.001
+        requestAnimationFrame(playAnimation)
       }
-      shakingAnimation()
+      playAnimation()
       scene.add(model)
     }
   })
@@ -107,11 +93,11 @@ onMounted(() => {
 
     &-bottom {
       position: absolute;
-      left: 0;
-      top: 0;
-      min-width: 600px;
-      width: 90%;
-      height: 100vh;
+      /* TODO: 这是为了 lec v0.4.x 没有适配挂载容器的问题 */
+      left: -400px;
+      top: 200px;
+      width: 300px;
+      background-color: transparent;
     }
   }
 
