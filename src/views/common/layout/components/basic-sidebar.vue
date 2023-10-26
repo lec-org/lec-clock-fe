@@ -10,5 +10,5 @@
 </template>
 
 <script setup lang="ts">
-import sidebarItems from '../configs'
+import { sidebarItems } from '../configs'
 </script>

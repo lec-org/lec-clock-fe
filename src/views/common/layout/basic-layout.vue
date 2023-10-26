@@ -1,5 +1,5 @@
 <template>
-  <a-layout class="wrapper">
+  <a-layout class="basic-layout">
     <a-layout-header class="header">
       <basic-header></basic-header>
     </a-layout-header>
@@ -24,12 +24,13 @@ import BasicHeader from './components/basic-header.vue'
 </script>
 
 <style scoped lang="scss">
-$header-height: 64px;
+$header-height: 64px !global;
 $header-bottom-gap: 12px;
 $footer-height: 14px; // footer后面再加
 $footer-top-gap: 40px;
 $common-gap: 14px;
-.wrapper {
+$common-radius: 4px;
+.basic-layout {
   height: 100vh;
   display: flex;
   flex-direction: column;
@@ -55,14 +56,21 @@ $common-gap: 14px;
     max-height: calc(
       100vh - $header-height - $header-bottom-gap - $footer-height
     );
+    min-height: 600px;
     /* overflow: hidden; */
     .sider {
+      height: 100%;
       box-shadow: 1px 1px 10px #aaa;
+      border-radius: $common-radius;
+      overflow: hidden;
     }
 
     .content {
+      height: 100%;
       overflow: auto;
       box-shadow: 1px 1px 6px #aaa;
+      border-radius: $common-radius;
+      overflow: hidden;
     }
   }
 
