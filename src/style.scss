@@ -10,7 +10,22 @@
   text-rendering: optimizeLegibility;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
-  min-width: 1024px; // 不想给移动端做适配，累死了
-  min-height: 100vh;
-  padding: 20px;
 }
+
+*::-webkit-scrollbar{
+  width:4px;
+  max-height: 10px;
+}
+*::-webkit-scrollbar-track{
+  background: rgb(239, 239, 239);
+  border-radius:2px;
+}
+*::-webkit-scrollbar-thumb{
+  background: #999;
+  border-radius:10px;
+}
+// *::-webkit-scrollbar-thumb:hover{
+//   background: #333;
+// }
+// *::-webkit-scrollbar-corner{
+// }

@@ -12,7 +12,6 @@ const __dirname = fileURLToPath(new URL('.', import.meta.url))
 export default defineConfig({
   plugins: [
     vue(),
-    vueJsx(),
     AutoImport({
       dts: path.resolve(__dirname, 'src/typings', 'auto-imports.d.ts'),
       imports: ['vue', 'vue-router', 'pinia', '@vueuse/core'],
@@ -35,7 +34,7 @@ export default defineConfig({
     proxy: {
       '/api': {
         target: 'http://58.87.105.56:8080',
-        rewrite: (path) => path.replace(/^\/api/, ''),
+        rewrite: (path: string) => path.replace(/^\/api/, ''),
         changeOrigin: true
       }
     }
