@@ -8,13 +8,6 @@ export const userRegisterService = ({
   grade,
   code
 }: Record<string, any>) => {
-  // const formData = new FormData();
-  // formData.append('username', username);
-  // formData.append('nickname', nickname);
-  // formData.append('password', password);
-  // formData.append('email', email);
-  // formData.append('grade', grade);
-  // formData.append('code', code);
   return request.post('/user/register', {username,nickname,password,email,grade,code,});
 }
 
@@ -36,3 +29,5 @@ export const userLoginService = ({
     password
   })
 }
+
+

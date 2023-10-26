@@ -102,6 +102,7 @@ import { useLoginStore } from '../store/login'
 import { userRegisterService, userCodeService } from '@/services'
 import { Message } from '@arco-design/web-vue'
 import router from '@/router'
+
 const loginStore = useLoginStore()
 const { activeForm, registerInfo } = storeToRefs(loginStore)
 const isActive = computed(() => activeForm.value === 'register')
@@ -110,13 +111,13 @@ const handleSubmit = async (info: Record<string, any>) => {
   await userRegisterService(info)
   
   Message.success('注册成功')
-  router.push('/')
+  loginStore.changeActiveForm()
 }
 
 const sendEmail = async () => {
   const { email } = unref(registerInfo)
-  const res = await userCodeService(email)
-  console.log(res)
+  await userCodeService(email)
+//   console.log(res)
 }
 </script>
 

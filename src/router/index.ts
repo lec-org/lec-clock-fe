@@ -20,7 +20,10 @@ const router = createRouter({
 
 router.beforeEach((to) =>{
   const userStore = useLoginStore()
-  if(!userStore.token && to.path !== '/login') return '/login'
+  userStore.token = localStorage.getItem('token') as unknown as string 
+  if(!userStore.token && to.path !== '/login') {
+    return '/login'
+  }
 })
 
 export default router

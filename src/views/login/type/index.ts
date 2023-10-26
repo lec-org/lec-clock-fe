@@ -7,5 +7,5 @@ export interface RegisterInfo extends LoginInfo {
   nickname: string
   email: string
   grade: number
-  code:number
+  code:number|undefined
 }

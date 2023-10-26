@@ -58,11 +58,13 @@ import router from '@/router'
 const loginStore = useLoginStore()
 const { activeForm, loginInfo } = storeToRefs(loginStore)
 const isActive = computed(() => activeForm.value === 'login')
-
+const {setToken, setId} = loginStore
 // 这组件库类型标的有点nt
 const handleSubmit = async(info: Record<string, any>) => {
   const res = await userLoginService(info)
-  loginStore.setToken(res.response.data.token)
+  setToken(res.response?.data.token)
+//   console.log(res.response?.data.token);
+  setId(res.response?.data.userInfoVo.id)
   Message.success('登陆成功')
   router.push('/')
 }

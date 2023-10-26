@@ -17,10 +17,18 @@ export const useLoginStore = defineStore('loginStore', () => {
     username: '',
     nickname: '',
     password: '',
-    email:'',
-    grade:1,
-    code:undefined
+    email: '',
+    grade: 1,
+    code: undefined
   })
+
+  const changeActiveForm = () => {
+    if (activeForm.value === 'login') {
+      activeForm.value = 'register'
+    } else {
+      activeForm.value = 'login'
+    }
+  }
 
   // 切换自动清空
   watch(activeForm, (value) => {
@@ -31,25 +39,25 @@ export const useLoginStore = defineStore('loginStore', () => {
         username: '',
         nickname: '',
         password: '',
-        email:'',
-        grade:1,
-        code:undefined
+        email: '',
+        grade: 1,
+        code: undefined
       }
     }
   })
 
-  const changeActiveForm = () => {
-    if (activeForm.value === 'login') {
-      activeForm.value = 'register'
-    } else {
-      activeForm.value = 'login'
-    }
-  }
   //  设置token
-  const token = ref('')
+  const token = ref<string>('')
   const setToken = (newToken: string) => {
     token.value = newToken
     // console.log('设置了token')
+  }
+  const localId = localStorage.getItem('Id') || null
+  const id = localId ? ref<string>(localId) : ref<string>('')
+  const setId = (newId: string) => {
+    if (id.value === '') {
+      id.value = newId
+    }
   }
   return {
     activeForm,
@@ -57,6 +65,8 @@ export const useLoginStore = defineStore('loginStore', () => {
     registerInfo,
     changeActiveForm,
     token,
-    setToken
+    setToken,
+    id,
+    setId
   }
 })
