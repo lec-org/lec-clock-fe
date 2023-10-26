@@ -106,9 +106,6 @@ const checkToRegister = () => {}
     width: 420px;
     height: 400px;
     .board {
-      /* display: flex; */
-      /* flex-direction: column; */
-      /* justify-content: center; */
       min-height: 400px;
       padding: 24px 32px;
       border-radius: 36px;

@@ -24,7 +24,7 @@ import BasicHeader from './components/basic-header.vue'
 </script>
 
 <style scoped lang="scss">
-$header-height: 64px !global;
+$header-height: 64px;
 $header-bottom-gap: 12px;
 $footer-height: 14px; // footer后面再加
 $footer-top-gap: 40px;
@@ -53,6 +53,7 @@ $common-radius: 4px;
     display: flex;
     gap: $common-gap;
     margin-top: calc($header-height + $header-bottom-gap);
+    height: 100%;
     max-height: calc(
       100vh - $header-height - $header-bottom-gap - $footer-height
     );

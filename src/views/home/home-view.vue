@@ -11,7 +11,6 @@
               <information />
               <clockIn />
             </div>
-            <logout />
           </a-layout-content>
         </a-layout>
       </a-layout>

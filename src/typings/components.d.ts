@@ -55,6 +55,7 @@ declare module 'vue' {
     LoginSlider: typeof import('./../views/login/components/login-slider.vue')['default']
     Logout: typeof import('./../views/home/components/logout.vue')['default']
     RankingView: typeof import('./../views/home/components/ranking-view.vue')['default']
+    RankList: typeof import('./../views/attendance/components/rank-list.vue')['default']
     RegisterForm: typeof import('./../views/login/components/register-form.vue')['default']
     RouterLink: typeof import('vue-router')['RouterLink']
     RouterView: typeof import('vue-router')['RouterView']
