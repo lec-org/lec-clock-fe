@@ -12,7 +12,6 @@ const __dirname = fileURLToPath(new URL('.', import.meta.url))
 export default defineConfig({
   plugins: [
     vue(),
-    vueJsx(),
     AutoImport({
       dts: path.resolve(__dirname, 'src/typings', 'auto-imports.d.ts'),
       imports: ['vue', 'vue-router', 'pinia', '@vueuse/core'],
