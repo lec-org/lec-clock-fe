@@ -11,15 +11,22 @@
 <script setup lang="ts">
 import axios from 'axios';
 import { ref, onMounted } from 'vue'
-
+import { startClockInService,checkoutToken } from '@/services';
+import { Message } from '@arco-design/web-vue';
+import router from '@/router';
 const isLoggedIn = ref(false);
+const token = localStorage.getItem('token') || '';
+
 // 检查 token 是否存在
-const checkToken = () => {
-    const token = localStorage.getItem('token');
+const checkToken = async() => {
     isLoggedIn.value = !!token;
+    const res = await checkoutToken(token)
+    if(!res.response?.data){
+        localStorage.removeItem("token")
+        router.push('/login')
+    }
 }
 
-const token = localStorage.getItem('token');
 
 // console.log(token);
 // 页面加载时检查 token
@@ -28,15 +35,15 @@ onMounted(checkToken);
 const startClockIn = async () => {
 
     try {
-        const response = await axios.post('http://58.87.105.56:8080/clock/clock', null, {
-            headers: {
-                token: token,
-            },
-        });
-        alert("操作成功");
-        console.log(response.data); // 处理响应数据
+        const res = await startClockInService(token)
+        if(res.response?.data.beginTime){
+            Message.success("打卡成功")
+        }else{
+            Message.success(`下卡成功，打卡总时长${res.response?.data.totalDuration}minutes`)
+        }
+        console.log(res.response?.data); // 处理响应数据
     } catch (error) {
-        alert("错误");
+        Message.error("出现错误")
         console.error(error);
     }
 };

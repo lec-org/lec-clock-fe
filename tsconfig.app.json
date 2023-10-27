@@ -1,27 +1,17 @@
 {
   "extends": "@vue/tsconfig/tsconfig.dom.json",
-<<<<<<< HEAD
-  "include": ["env.d.ts", "src/**/*", "src/**/*.vue"],
-  "exclude": ["src/**/__tests__/*"],
-  "compilerOptions": {
-=======
   "include": ["env.d.ts", "src/**/*", "src/**/*.vue", "src/**/*"],
   "exclude": ["src/**/__tests__/*"],
   "compilerOptions": {
     "jsx": "preserve",
     "jsxFactory": "h",
     "jsxFragmentFactory": "Fragment",
->>>>>>> 96096f18bd850164bbda7ebb3dbd496fe0bfa982
     "composite": true,
     "baseUrl": ".",
     "verbatimModuleSyntax": false,
     "paths": {
       "@/*": ["./src/*"]
-<<<<<<< HEAD
-    }
-=======
     },
     "moduleResolution": "Node"
->>>>>>> 96096f18bd850164bbda7ebb3dbd496fe0bfa982
   }
 }

@@ -1,18 +1,4 @@
 <template>
-<<<<<<< HEAD
-  <a-button @click="changePunch">{{ punch }}</a-button>
-</template>
-
-<script setup lang="ts">
-import { userMainStore } from './store/index'
-import { userUpCard } from '@/services/index'
-const userMain = userMainStore()
-const { punch } = storeToRefs(userMain)
-const { changePunch } = userMain
-</script>
-
-<style scoped lang="scss"></style>
-=======
   <basic-layout>
     <template #default>
       <a-layout class="layout-demo">
@@ -137,4 +123,3 @@ onMounted(() => {
   border-bottom: 1px solid rgb(204, 204, 204);
 }
 </style>
->>>>>>> 96096f18bd850164bbda7ebb3dbd496fe0bfa982

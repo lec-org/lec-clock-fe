@@ -19,7 +19,13 @@
 
 <script>
 import axios from 'axios'
-
+import {
+    getUserInfoService,
+    saveNameService,
+    saveSignatureService,
+    uploadFileServices
+} from "@/services"
+import { Message } from '@arco-design/web-vue'
 export default {
   data() {
     return {
@@ -32,25 +38,17 @@ export default {
   },
   methods: {
     getUserInfo() {
-      const id = localStorage.getItem('id');
-      const token = localStorage.getItem('token');
-      const url = `http://58.87.105.56:8080/user/info/${id}`;
-      axios.get(url, {
-        headers: {
-          token: token
-        }
+      const id = localStorage.getItem('id') || "";
+    //   console.log("id",id)
+      const token = localStorage.getItem('token') || "";
+      const res = getUserInfoService({id,token})
+      res.then(res=>{
+        console.log(res.response);
+        const {nickname,signature,avatar} = res.response.data
+        this.name = nickname
+        this.signature = signature
+        this.valueUrl = avatar
       })
-      .then(response => {
-        const { nickname, signature, avatar } = response.data;
-        this.name = nickname;
-        this.signature = signature;
-        // 处理头像相关逻辑
-        // this.valueUrl = avatar;
-      })
-      .catch(error => {
-        console.error(error);
-        // 可以在这里根据错误情况给出适当的提示或进行其他处理
-      });
     },
     editName() {
       this.editingName = true;
@@ -58,19 +56,15 @@ export default {
     saveName() {
       this.editingName = false;
       const token = localStorage.getItem('token');
-      axios.put('http://58.87.105.56:8080/user/info/update', {
-        nickname: this.name
-      }, {
-        headers: {
-          token: token
-        }
-      })
-      .then(response => {
-        alert("操作成功");
-        console.log(response.data);
+      const res = saveNameService({name:this.name,token})
+
+      res.then(res => {
+        Message.success("修改昵称成功")
+        console.log(res.data);
         // 可以在这里根据后端返回的数据更新前端的状态或做其他操作
       })
       .catch(error => {
+        Message.error("修改昵称错误")
         console.error(error);
         // 可以在这里根据错误情况给出适当的提示或进行其他处理
       });
@@ -81,15 +75,9 @@ export default {
     saveSignature() {
       this.editingSignature = false;
       const token = localStorage.getItem('token');
-      axios.put('http://58.87.105.56:8080/user/info/update', {
-        signature: this.signature
-      }, {
-        headers: {
-          token: token
-        }
-      })
-      .then(response => {
-        alert("操作成功");
+      const res = saveSignatureService({signature:this.signature,token})
+      res.then(response => {
+        Message.success("操作成功");
         console.log(response.data);
         // 可以在这里根据后端返回的数据更新前端的状态或做其他操作
       })
@@ -99,7 +87,7 @@ export default {
       });
     },
     toGetImg() {
-      inputElement = document.createElement('input');
+      const inputElement = document.createElement('input');
       inputElement.setAttribute('type', 'file');
       inputElement.style.display = 'none';
 
@@ -120,25 +108,18 @@ export default {
           this.$message.error('请选择图片文件');
         } else {
           const reader = new FileReader();
+          const token = localStorage.getItem('token')
           reader.readAsDataURL(el.target.files[0]);
           reader.onload = () => {
             this.valueUrl = reader.result;
-
-            const formData = new FormData();
-            formData.append('image', files);
-
-            const token = localStorage.getItem('token'); // 获取 token
-            axios.put('http://58.87.105.56:8080/user/upload', formData, {
-              headers: {
-                token: token,
-              },
-            })
-            .then(response => {
-              alert("操作成功");
-              console.log(response.data);
+            const res = uploadFileServices({file:reader.result,token})
+            res.then(response => {
+              Message.success("修改头像成功")
+            //   console.log(response.data);
               // 可以在这里根据后端返回的数据更新前端的状态或做其他操作
             })
             .catch(error => {
+                Message.error("修改头像失败")
               console.error(error);
               // 可以在这里根据错误情况给出适当的提示或进行其他处理
             });

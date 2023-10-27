@@ -102,7 +102,6 @@ import { useLoginStore } from '../store/login'
 import { userRegisterService, userCodeService } from '@/services'
 import { Message } from '@arco-design/web-vue'
 import router from '@/router'
-
 const loginStore = useLoginStore()
 const { activeForm, registerInfo } = storeToRefs(loginStore)
 const isActive = computed(() => activeForm.value === 'register')
@@ -111,26 +110,17 @@ const handleSubmit = async (info: Record<string, any>) => {
   await userRegisterService(info)
   
   Message.success('注册成功')
-<<<<<<< HEAD
-  loginStore.changeActiveForm()
-=======
   router.push('/')
->>>>>>> 96096f18bd850164bbda7ebb3dbd496fe0bfa982
 }
 
 const sendEmail = async () => {
   const { email } = unref(registerInfo)
-<<<<<<< HEAD
+
   await userCodeService(email)
 //   console.log(res)
-=======
-  const res = await userCodeService(email)
-  console.log(res)
->>>>>>> 96096f18bd850164bbda7ebb3dbd496fe0bfa982
 }
 </script>
-
-<style lang="scss">
+<style>
 .register-form {
   height: 100%;
   position: absolute;
@@ -178,9 +168,4 @@ const sendEmail = async () => {
 }
 </style>
 
-function storeToRefs(loginStore: any): { activeForm: any; registerInfo: any } {
-throw new Error('Function not implemented.') } function computed(arg0: () =>
-boolean) { throw new Error('Function not implemented.') } function
-storeToRefs(loginStore: any): { activeForm: any; registerInfo: any } { throw new
-Error('Function not implemented.') } function computed(arg0: () => boolean) {
-throw new Error('Function not implemented.') }
+
