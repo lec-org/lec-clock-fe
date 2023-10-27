@@ -111,13 +111,22 @@ const handleSubmit = async (info: Record<string, any>) => {
   await userRegisterService(info)
   
   Message.success('注册成功')
+<<<<<<< HEAD
   loginStore.changeActiveForm()
+=======
+  router.push('/')
+>>>>>>> 96096f18bd850164bbda7ebb3dbd496fe0bfa982
 }
 
 const sendEmail = async () => {
   const { email } = unref(registerInfo)
+<<<<<<< HEAD
   await userCodeService(email)
 //   console.log(res)
+=======
+  const res = await userCodeService(email)
+  console.log(res)
+>>>>>>> 96096f18bd850164bbda7ebb3dbd496fe0bfa982
 }
 </script>
 

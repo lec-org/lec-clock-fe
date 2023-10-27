@@ -1,6 +1,6 @@
 import axios, { AxiosRequestConfig, AxiosResponse, AxiosError } from 'axios'
 import { RequestResult } from './type'
-import router from "@/router"
+
 import { ResponseData } from './type'
 import { useLoginStore } from '../views/login/store/login'
 const instance = axios.create({
@@ -18,9 +18,6 @@ instance.interceptors.request.use(
     return config
   },
   (error) => {
-    if(error.response?.status===401){
-        router.push('/login')
-    }
     Promise.reject(error)
   }
 )
@@ -82,7 +79,9 @@ export class RequestError extends Error {
 
 export const request = {
   async get<T = any>(url: string, config?: AxiosRequestConfig) {
-    const result: RequestResult<T> = {}
+    const result: RequestResult<T> = {
+      data: undefined
+    }
 
     try {
       const res = await instance.get<ResponseData<T>>(url, config)
@@ -94,7 +93,9 @@ export const request = {
     return result
   },
   async post<T = any>(url: string, data?: any, config?: AxiosRequestConfig) {
-    const result: RequestResult<T> = {}
+    const result: RequestResult<T> = {
+      data: undefined
+    }
 
     try {
       const res = await instance.post<ResponseData<T>>(url, data, config)
@@ -104,6 +105,7 @@ export const request = {
         result.error = err
       }
     }
+
     return result
   }
 }
