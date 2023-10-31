@@ -71,6 +71,7 @@ $common-radius: 4px;
       overflow: auto;
       box-shadow: 1px 1px 6px #aaa;
       border-radius: $common-radius;
+      padding: $common-gap;
       overflow: hidden;
     }
   }

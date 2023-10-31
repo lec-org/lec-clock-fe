@@ -65,7 +65,6 @@ onMounted(() => {
 
 <style scoped lang="scss">
 .home-view {
-  padding: 14px;
   height: 100%;
 
   .content {
