@@ -17,8 +17,7 @@
   </div>
 </template>
 
-<script>
-import axios from 'axios'
+<script >
 import {
     getUserInfoService,
     saveNameService,
@@ -87,7 +86,7 @@ export default {
       });
     },
     toGetImg() {
-      const inputElement = document.createElement('input');
+      const inputElement = ref<Element>(document.createElement('input'))
       inputElement.setAttribute('type', 'file');
       inputElement.style.display = 'none';
 

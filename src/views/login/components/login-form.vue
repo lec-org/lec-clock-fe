@@ -65,7 +65,7 @@
 <script setup lang="ts">
 import { useLoginStore } from '../store/login'
 import { userLoginService } from '@/services'
-
+import { Message } from '@arco-design/web-vue'
 import router from '@/router'
 
 const loginStore = useLoginStore()
@@ -73,14 +73,32 @@ const { activeForm, loginInfo } = storeToRefs(loginStore)
 const isActive = computed(() => activeForm.value === 'login')
 const isRemembered = ref(false)
 
-const handleSubmit = async (info: Record<string, any>) => {
-  const res = await userLoginService(info)
-  console.log(res)
-  loginStore.setToken(res.response?.data.token)
-  loginStore.setId(res.response?.data.userInfoVo.id)
-  Message.success('登录成功')
-  router.push('/home')
-}
+const handleSubmit = async (info: Record<string, any>) => {  
+  try {  
+    const res = await userLoginService(info);  
+    console.log(res);
+    
+    if (res.error) {  
+      if (res.error === 'invalid_password') {  
+        Message.error("密码错误");  
+      } else if (res.error === 'invalid_username') {  
+        Message.error("用户名错误");  
+      } else if (res.error === 'network_error') {  
+        Message.error("网络错误");  
+      } else {  
+        Message.error("登录失败：" + res.error);  
+      }  
+    } else {  
+      loginStore.setToken(res.response?.data.token);  
+      loginStore.setId(res.response?.data.userInfoVo.id);  
+      Message.success('登录成功');  
+      router.push('/home');  
+    }  
+  } catch (error) {  
+    console.error(error);  
+    Message.error("登录失败：" + error.message);  
+  }  
+};
 
 const checkToRegister = () => {}
 </script>
