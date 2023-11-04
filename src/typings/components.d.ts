@@ -66,6 +66,7 @@ declare module 'vue' {
     RankingView: typeof import('./../views/home/components/ranking-view.vue')['default']
     RankList: typeof import('./../views/attendance/components/rank-list.vue')['default']
     RegisterForm: typeof import('./../views/login/components/register-form.vue')['default']
+    RightSidebar: typeof import('./../views/home/components/right-sidebar.vue')['default']
     RouterLink: typeof import('vue-router')['RouterLink']
     RouterView: typeof import('vue-router')['RouterView']
     TodoList: typeof import('./../views/home/components/todo-list.vue')['default']

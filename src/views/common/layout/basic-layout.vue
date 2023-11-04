@@ -5,9 +5,11 @@
     </a-layout-header>
 
     <div class="main">
-      <a-layout-sider class="sider" collapsible breakpoint="xl">
-        <basic-sidebar></basic-sidebar>
-      </a-layout-sider>
+      <template v-if="!props.hideLeftSidebar">
+        <a-layout-sider class="sider" collapsible breakpoint="xl">
+          <basic-sidebar></basic-sidebar>
+        </a-layout-sider>
+      </template>
 
       <a-layout-content class="content">
         <slot></slot>
@@ -21,6 +23,10 @@
 <script setup lang="ts">
 import BasicSidebar from './components/basic-sidebar.vue'
 import BasicHeader from './components/basic-header.vue'
+
+const props = defineProps<{
+  hideLeftSidebar?: boolean
+}>()
 </script>
 
 <style scoped lang="scss">

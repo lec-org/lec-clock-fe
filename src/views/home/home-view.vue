@@ -1,8 +1,8 @@
 <script setup lang="ts">
-import axios from 'axios'
 import { ref, onMounted } from 'vue'
 import BasicLayout from '@/views/common/layout/basic-layout.vue'
 import clockInfo from './components/clock-info.vue'
+import { request } from '@/services/request'
 
 const isLoggedIn = ref(false)
 // 检查 token 是否存在
@@ -10,34 +10,28 @@ const checkToken = () => {
   const token = localStorage.getItem('token')
   isLoggedIn.value = !!token
 }
-const name = localStorage.getItem('name')
-const token = localStorage.getItem('token')
-const expandSidebar = ref(false) // 响应式数据，控制右边栏的展开和收起状态
+// const name = localStorage.getItem('name')
+// const token = localStorage.getItem('token')
+// const expandSidebar = ref(false) // 响应式数据，控制右边栏的展开和收起状态
 
-// 页面加载时检查 token
-onMounted(checkToken)
+// const startClockIn = async () => {
+//   try {
+//     const response = await request.post('/clock/clock', null, {
+//       headers: {
+//         token: token
+//       }
+//     })
+//     console.log(response.data) // 处理响应数据
+//   } catch (error) {
+//     console.error(error)
+//   }
+// }
 
-const startClockIn = async () => {
-  try {
-    const response = await axios.post(
-      'http://58.87.105.56:8080/clock/clock',
-      null,
-      {
-        headers: {
-          token: token
-        }
-      }
-    )
-    console.log(response.data) // 处理响应数据
-  } catch (error) {
-    console.error(error)
-  }
-}
-
-const toggleSidebar = async () => {
-  expandSidebar.value = !expandSidebar.value
-}
+// const toggleSidebar = async () => {
+//   expandSidebar.value = !expandSidebar.value
+// }
 onMounted(() => {
+  checkToken()
   const sidebar = document.getElementById('sidebar')
   if (sidebar) {
     sidebar.style.width = '0'
@@ -48,30 +42,48 @@ onMounted(() => {
 
 <template>
   <basic-layout>
-    <a-layout class="home-view">
-      <a-layout-header>
-        <clock-info />
-      </a-layout-header>
+    <div class="content-wrapper">
+      <div class="left">
+        <a-layout>
+          <a-layout-header>
+            <clock-info />
+          </a-layout-header>
 
-      <a-layout-content class="content">
-        <clock-button />
-        <line-chart />
-      </a-layout-content>
+          <a-layout-content class="content">
+            <clock-button />
+            <line-chart />
+          </a-layout-content>
 
-      <a-layout-footer> </a-layout-footer>
-    </a-layout>
+          <a-layout-footer> </a-layout-footer>
+        </a-layout>
+      </div>
+
+      <!-- TODO： 在通用 layout 上加一个 right-sidebar -->
+      <div class="right">
+        <right-sidebar></right-sidebar>
+      </div>
+    </div>
   </basic-layout>
 </template>
 
 <style scoped lang="scss">
-.home-view {
+.content-wrapper {
+  display: flex;
   height: 100%;
+  gap: 24px;
+  .left {
+    flex: 2;
+    width: 100%;
 
-  .content {
-    display: flex;
-    align-items: center;
-    gap: 12px;
-    max-height: 300px;
+    .content {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      max-height: 300px;
+    }
+  }
+
+  .right {
   }
 }
 </style>
