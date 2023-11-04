@@ -24,6 +24,7 @@ import { request } from '@/services/request'
 import { Message } from '@arco-design/web-vue'
 import { ref, onMounted } from 'vue'
 import dayjs from 'dayjs'
+import { startClockInService } from '@/services';
 
 // 时区偏差修正
 const timeZoneOffset = -8 * 1000 * 60 * 60
@@ -34,31 +35,20 @@ const clockingTime = ref(timeZoneOffset)
 /** 计时器单例 */
 const singleInterval = ref<number>()
 
-const token = localStorage.getItem('token')
+const token = localStorage.getItem('token') || ""
 const checkToken = () => {
-  const token = localStorage.getItem('token')
   isLoggedIn.value = !!token
 }
 
 const startClockIn = async () => {
   try {
-    const response = await request.post('/api/clock/clock', null, {
-      headers: {
-        token: token
-      }
-    })
+    const response = await startClockInService(token)
+    console.log(response);
     isClocking.value = !isClocking.value
-    console.log(response.data) // 处理响应数据
-    if (!singleInterval.value) {
-      Message.success('开始打卡')
-      singleInterval.value = setInterval(() => {
-        clockingTime.value++
-      }, 1000)
-    } else {
-      Message.success('结束打卡')
-      clearInterval(singleInterval.value)
-      singleInterval.value = 0
-      clockingTime.value = timeZoneOffset
+    if(response.response?.data.status==1){
+        Message.success("成功上卡")
+    }else{
+        Message.success("成功下卡")
     }
   } catch (error) {
     Message.error('未知错误')

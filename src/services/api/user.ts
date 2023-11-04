@@ -103,3 +103,26 @@ export const uploadFileServices = async ({
       }
     return await request.post('/user/upload',formData,config)
 }
+
+// 查看打卡列表
+export const checkoutList = async({
+    grade:grade,
+    pageSize:pageSize,
+    pageNum:pageNum
+}:Record<string,any>) =>{
+    const data = {grade,pageSize,pageNum}
+    return await request.post('/clock/list',data)
+}
+
+//查看打卡信息
+export const checkoutInfo = async({
+    token,
+    id
+}:Record<string,any>) =>{
+    const config = {
+        headers:{
+            token
+        }
+    }
+    return await request.get(`/clock/nowClock/${id}`,config)
+}

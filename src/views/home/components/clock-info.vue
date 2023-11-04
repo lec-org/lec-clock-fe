@@ -41,10 +41,34 @@
 </template>
 
 <script setup lang="ts">
+import { checkoutInfo, getUserInfoService } from '@/services';
 import { clockInfoDataList, weatherInfoList } from '../configs'
+
 const data = reactive({
-  username: ''
+  username: '',
+  totalDuration:'',
+  targetDuration:''
 })
+const id = localStorage.getItem('id') || ""
+const token = localStorage.getItem("token") || ""
+//更新个人信息
+onMounted(async()=>{
+    const res = await getUserInfoService({id,token})
+    const info = res.response?.data
+    data.username = info.nickname
+    
+})
+
+
+//获取打卡时长
+onMounted(async()=>{
+    const res = await checkoutInfo({token,id})
+    if(res.response?.code===200){
+        data.totalDuration = res.response?.data.totalDuration
+        data.targetDuration = res.response?.data.targetDuration
+    }
+})
+
 </script>
 
 <style scoped lang="scss">

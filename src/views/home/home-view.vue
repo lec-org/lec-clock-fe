@@ -1,39 +1,29 @@
 <script setup lang="ts">
-import axios from 'axios'
 import { ref, onMounted } from 'vue'
 import BasicLayout from '@/views/common/layout/basic-layout.vue'
 import clockInfo from './components/clock-info.vue'
+import { checkoutToken } from '@/services';
+import router from '@/router';
+import { Message } from '@arco-design/web-vue';
 
 const isLoggedIn = ref(false)
 // 检查 token 是否存在
-const checkToken = () => {
-  const token = localStorage.getItem('token')
+const token = localStorage.getItem('token') || ""
+const checkToken = async() => {
   isLoggedIn.value = !!token
+  if(token){
+    const res = await checkoutToken(token)
+    if(!res.response?.data){
+        Message.error("token过期了")
+        router.push('/login')
+    }
+  }
 }
-const name = localStorage.getItem('name')
-const token = localStorage.getItem('token')
+
 const expandSidebar = ref(false) // 响应式数据，控制右边栏的展开和收起状态
 
 // 页面加载时检查 token
 onMounted(checkToken)
-
-const startClockIn = async () => {
-  try {
-    const response = await axios.post(
-      'http://58.87.105.56:8080/clock/clock',
-      null,
-      {
-        headers: {
-          token: token
-        }
-      }
-    )
-    console.log(response.data) // 处理响应数据
-  } catch (error) {
-    console.error(error)
-  }
-}
-
 const toggleSidebar = async () => {
   expandSidebar.value = !expandSidebar.value
 }

@@ -58,7 +58,7 @@
 <script lang="ts" setup>
 import { ref, computed, watch } from 'vue'
 import axios from 'axios'
-
+import { checkoutList } from '@/services';
 interface User {
   avatar: string
   nickname: string
@@ -72,16 +72,16 @@ const users = ref<User[]>([])
 
 watch(currentGrade, async (newGrade) => {
   try {
-    const response = await axios.post('http://58.87.105.56:8080/clock/list', {
+    const response = await checkoutList({
       grade: newGrade,
       pageSize: 40,
       pageNum: 1
     })
 
-    const responseData = response.data
+    const responseData = response.response
     console.log('responseData:', responseData) // 调试语句
     if (
-      responseData.code === 200 &&
+      responseData?.code === 200 &&
       responseData.data &&
       responseData.data.rows
     ) {

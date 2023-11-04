@@ -64,6 +64,7 @@ const responseTypeCheck = (response: AxiosResponse<ResponseData>) => {
 }
 
 export class RequestError extends Error {
+[x: string]: any
   code: string | number //服务端返回的自定义code或axios的错误code
   status?: number //http状态码
   response?: AxiosResponse

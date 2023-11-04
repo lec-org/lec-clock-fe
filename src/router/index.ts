@@ -1,6 +1,5 @@
 import { createRouter, createWebHistory } from 'vue-router'
 import { useLoginStore } from '@/views/login/store/login'
-import {checkoutToken} from '@/services'
 const routes = [
   {
     path: '/',
