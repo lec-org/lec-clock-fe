@@ -60,3 +60,67 @@ export const avatarDropdownItems = [
     }
   }
 ]
+
+export const platforms = {
+  internDevelopment: {
+    name: '内部产品导航',
+    list: [
+      {
+        icon: 'icon-github',
+        text: '乐程开源',
+        clickEvent: () => {
+          window.open('https://github.com/lec-org')
+        }
+      }
+    ]
+  },
+  externalApplication: {
+    name: '第三方产品导航',
+    list: [
+      {
+        icon: '',
+        text: '学习通',
+        clickEvent: () => {
+          window.open('https://i.chaoxing.com/')
+        }
+      },
+      {
+        icon: '',
+        text: 'bilibili',
+        clickEvent: () => {
+          window.open('https://www.bilibili.com/')
+        }
+      },
+      {
+        icon: '',
+        text: '学校官网',
+        clickEvent: () => {
+          window.open('https://www.swpu.edu.cn/')
+        }
+      },
+      {
+        icon: '',
+        text: '教务处',
+        clickEvent: () => {
+          window.open(
+            'https://www.swpu.edu.cn/dean/searchList.jsp?wbtreeid=1193'
+          )
+        }
+      },
+      {
+        icon: '',
+        text: '力扣',
+        clickEvent: () => {
+          window.open('https://leetcode.cn/')
+        }
+      },
+      {
+        icon: '',
+        text: '洛谷',
+        clickEvent: () => {
+          window.open('https://www.luogu.com.cn/')
+        }
+      }
+    ]
+  }
+}

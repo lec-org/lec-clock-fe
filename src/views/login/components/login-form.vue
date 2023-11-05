@@ -4,7 +4,7 @@
       <a-form
         class="login-form__content"
         :model="loginInfo"
-        @submit-success="handleSubmit"
+        @submit-success="debouncedLogin"
         layout="vertical"
       >
         <a-space class="board" direction="vertical">
@@ -66,21 +66,40 @@
 import { useLoginStore } from '../store/login'
 import { userLoginService } from '@/services'
 import { Message } from '@arco-design/web-vue'
+import { debounceAsync } from '@/services/debounce'
 import router from '@/router'
 
 const loginStore = useLoginStore()
 const { activeForm, loginInfo } = storeToRefs(loginStore)
 const isActive = computed(() => activeForm.value === 'login')
 const isRemembered = ref(false)
-
-const handleSubmit = async (info: Record<string, any>) => {
-  const res = await userLoginService(info)
-  loginStore.setToken(res.response?.data.token)
-  Message.success('登录成功')
-  router.push('/home')
+const checkToRegister = () => {
+    activeForm.value = 'register'
 }
 
-const checkToRegister = () => {}
+const handleSubmit = async (info: Record<string, any>) => {
+  try {
+    const res = await userLoginService(info)
+    console.log(res)
+    if (res.error) {
+      if (res.error.message === '响应数据格式错误') {
+        Message.error('账号或密码错误')
+      } else {
+        Message.error('登录失败：' + res.error.message)
+      }
+    } else {
+      loginStore.setToken(res.response?.data.token)
+      loginStore.setId(res.response?.data.userInfoVo.id)
+      Message.success('登录成功')
+      router.push('/home')
+    }
+  } catch (error) {
+    console.error(error)
+    Message.error('登录失败：' + error)
+  }
+}
+const debouncedLogin = debounceAsync(handleSubmit,1000)
+
 </script>
 
 <style lang="scss">

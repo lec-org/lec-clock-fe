@@ -1,4 +1,5 @@
 import { request } from '@/services/request'
+import { number } from 'echarts';
 //注册功能
 export const userRegisterService = ({
   username,
@@ -8,14 +9,7 @@ export const userRegisterService = ({
   grade,
   code
 }: Record<string, any>) => {
-  return request.post('/user/register', {
-    username,
-    nickname,
-    password,
-    email,
-    grade,
-    code
-  })
+  return request.post('/user/register', {username,nickname,password,email,grade,code,});
 }
 
 //发送验证码功能
@@ -26,28 +20,110 @@ export const userCodeService = (email: string) => {
   return request.post('/user/register/sendCode', formData)
 }
 
-// 登录功能
+//登陆功能
 export const userLoginService = ({
   username,
   password
-}: Record<string, any>) => {
-  return request
-    .post('/user/login', {
-      username,
-      password
-    })
-    .then((response) => {
-      if (
-        response.data &&
-        response.data.code !== undefined &&
-        response.data.data !== undefined
-      ) {
-        const { code, data } = response.data
-        if (code === 0 && data && data.userInfoVo && data.userInfoVo.id) {
-          const userId = data.userInfoVo.id
-          localStorage.setItem('userId', userId) // 存储id信息到localStorage
+}:Record<string,any>)=>{
+  return request.post('/user/login',{
+    username,
+    password
+  })
+}
+
+//上下卡
+export const startClockInService = (token:string)=>{
+    const config = {
+        headers: {
+            token: token,
+        },
+    }
+    return request.post('/clock/clock',null,config)
+}
+
+// 验证token
+export const checkoutToken = (token:string)=>{
+    const config:Object = {
+        headers:{
+            token:token,
+        },
+    }
+    return request.get('/user/isDead',config)
+}
+
+// 获取个人信息
+export const getUserInfoService =async ({
+    id,
+    token,
+}:Record<string,any>)=>{
+    const config = {
+        headers: {
+          token: token
         }
       }
-      return response
+    return await request.get(`/user/info/${id}`,config)  
+}
+//个人信息————保存昵称
+export const saveNameService = async({
+    name,
+    token
+}:Record<string,any>)=>{
+    return await request.post('/user/info/update',{
+        nickname:name
+    },{
+        headers:{
+            token:token
+        }
     })
+}
+//个人信息————保存个性签名
+export const saveSignatureService = async ({
+    signature,
+    token
+}:Record<string,any>)=>{
+    return await request.post('user/info/update',{
+        signature
+    },{
+        headers:{
+            token
+        }
+    })
+}
+
+// 上传头像
+export const uploadFileServices = async ({
+    file,
+    token
+}:Record<string,any>)=>{
+    const formData = new FormData()
+    formData.append('images',file)
+    const config = {
+        headers: {
+          token: token,
+        },
+      }
+    return await request.post('/user/upload',formData,config)
+}
+
+// 查看打卡列表
+export const checkoutList = async({
+    grade:grade,
+    pageSize:pageSize,
+    pageNum:pageNum
+}:Record<string,number>) =>{
+    const data = {grade,pageSize,pageNum}
+    return await request.post('/clock/list',data,{})
+}
+
+//查看打卡信息
+export const checkoutInfo = async({
+    token,
+    id
+}:Record<string,any>) =>{
+    const config = {
+        headers:{
+            token
+        }
+    }
+    return await request.get(`/clock/nowClock/${id}`,config)
 }

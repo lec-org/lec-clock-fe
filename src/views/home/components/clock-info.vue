@@ -2,7 +2,7 @@
   <div class="clock-info">
     <h2>
       {{
-        data.username ? `🎉 欢迎回来，${data.username}` : '🤯 用户名加载失败'
+        selfUser.nickname ? `🎉 欢迎回来，${selfUser.nickname}` : '🤯 用户名加载失败'
       }}
     </h2>
 
@@ -18,7 +18,7 @@
       </div>
 
       <div class="statistics">
-        <template v-for="item in clockInfoDataList" :key="item.key">
+        <template v-for="(item,index) in clockInfoDataList" :key="item.key">
           <div class="statistics-item">
             <div class="left">
               <img :src="item.icon" />
@@ -27,7 +27,7 @@
             <div class="right">
               <div class="title">{{ item.title }}</div>
               <div class="data">
-                <span class="current-value">30{{ item.unit }}</span>
+                <span class="current-value">{{dataList[index]}} {{ item.unit }}</span>
                 <span class="max-value">
                   /{{ item.maxValue }}{{ item.unit }}
                 </span>
@@ -42,9 +42,11 @@
 
 <script setup lang="ts">
 import { clockInfoDataList, weatherInfoList } from '../configs'
-const data = reactive({
-  username: ''
-})
+import { userMainStore } from '../store'
+
+const userMain = userMainStore()
+const { selfUser,dataList } = storeToRefs(userMain)
+
 </script>
 
 <style scoped lang="scss">
