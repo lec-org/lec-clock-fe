@@ -57,12 +57,11 @@ onMounted(() => {
           <a-layout-footer> </a-layout-footer>
         </a-layout>
       </div>
-
-      <!-- TODO： 在通用 layout 上加一个 right-sidebar -->
-      <div class="right">
-        <right-sidebar></right-sidebar>
-      </div>
     </div>
+
+    <template #right-sidebar>
+      <right-sidebar></right-sidebar>
+    </template>
   </basic-layout>
 </template>
 

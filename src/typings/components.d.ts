@@ -48,6 +48,8 @@ declare module 'vue' {
     ATypographyTitle: typeof import('@arco-design/web-vue')['TypographyTitle']
     Background: typeof import('./../views/login/components/background.vue')['default']
     BasicHeader: typeof import('./../views/common/layout/components/basic-header.vue')['default']
+    BasicLeftSidebar: typeof import('./../views/common/layout/components/basic-left-sidebar.vue')['default']
+    BasicRightSidebar: typeof import('./../views/common/layout/components/basic-right-sidebar.vue')['default']
     BasicSidebar: typeof import('./../views/common/layout/components/basic-sidebar.vue')['default']
     ClockButton: typeof import('./../views/home/components/clock-button.vue')['default']
     ClockIn: typeof import('./../views/home/components/clockIn.vue')['default']

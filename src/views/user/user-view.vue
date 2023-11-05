@@ -1,5 +1,5 @@
 <template>
-  <basic-layout>
+  <basic-layout hide-right-sidebar>
     <div>这是个人主页</div>
   </basic-layout>
 </template>
