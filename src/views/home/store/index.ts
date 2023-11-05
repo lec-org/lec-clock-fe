@@ -1,18 +1,21 @@
-type PUNCH = '上卡' | '下卡'
-
+import { User } from '../type'
 export const userMainStore = defineStore('userMain', () => {
-  const punch = ref<PUNCH>('上卡')
-  const changePunch = () => {
-    if (punch.value === '上卡') {
-      punch.value = '下卡'
-      
-    } else {
-      punch.value = '上卡'
-    }
-  }
+  const userList:User[] = ref<Array<User>>([])
+  const selfUser:User = reactive<User>({
+    avatar: '',
+    nickname: '',
+    totalDuration: 0,
+    targetDuration: 0,
+    grade: 0,
+    status: 0
+  })
+  const dataList:any[] = reactive<any>([])
+
   return {
-    punch,
-    changePunch
+    userList,
+    selfUser,
+    dataList,
+
   }
-})
+},{persist:true})
 

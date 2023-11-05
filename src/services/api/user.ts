@@ -1,4 +1,5 @@
 import { request } from '@/services/request'
+import { number } from 'echarts';
 //注册功能
 export const userRegisterService = ({
   username,
@@ -109,9 +110,9 @@ export const checkoutList = async({
     grade:grade,
     pageSize:pageSize,
     pageNum:pageNum
-}:Record<string,any>) =>{
+}:Record<string,number>) =>{
     const data = {grade,pageSize,pageNum}
-    return await request.post('/clock/list',data)
+    return await request.post('/clock/list',data,{})
 }
 
 //查看打卡信息

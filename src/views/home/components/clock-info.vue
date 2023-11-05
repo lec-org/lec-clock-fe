@@ -2,7 +2,7 @@
   <div class="clock-info">
     <h2>
       {{
-        data.username ? `🎉 欢迎回来，${data.username}` : '🤯 用户名加载失败'
+        selfUser.nickname ? `🎉 欢迎回来，${selfUser.nickname}` : '🤯 用户名加载失败'
       }}
     </h2>
 
@@ -27,7 +27,7 @@
             <div class="right">
               <div class="title">{{ item.title }}</div>
               <div class="data">
-                <span class="current-value">{{Math.floor(dataList[index]/60)}} {{ item.unit }}</span>
+                <span class="current-value">{{dataList[index]}} {{ item.unit }}</span>
                 <span class="max-value">
                   /{{ item.maxValue }}{{ item.unit }}
                 </span>
@@ -44,23 +44,29 @@
 import { checkoutInfo, checkoutList, getUserInfoService } from '@/services';
 import { clockInfoDataList, weatherInfoList } from '../configs'
 import { User } from '../type/index'
+import { userMainStore } from '../store'
+import { Message } from '@arco-design/web-vue';
 
-const userList = ref<User[]>([])
-const data = reactive({
-  username: '',
-  totalDuration:'',
-  targetDuration:'',
-  grade:0
-})
-const dataList:any[] = []
+const userMain = userMainStore()
+const { userList,selfUser,dataList } = storeToRefs(userMain)
+
 const id = localStorage.getItem('id') || ""
 const token = localStorage.getItem("token") || ""
 //更新个人信息
 onMounted(async()=>{
-    const res = await getUserInfoService({id,token})
-    const info = res.response?.data
-    data.username = info.nickname
-    data.grade = info.grade
+    try{
+        const res = await getUserInfoService({id,token})
+        const info = res.response?.data
+        if(info){
+            selfUser.value.nickname = info.nickname
+            selfUser.value.grade = info.grade
+            getCardList()
+        }else{
+            Message.error("获取用户信息失败")
+        }
+    }catch(error){
+        console.error()
+    }
 })
 
 
@@ -68,20 +74,19 @@ onMounted(async()=>{
 onMounted(async()=>{
     const res = await checkoutInfo({token,id})
     if(res.response?.code===200){
-        data.totalDuration = res.response?.data.totalDuration
-        data.targetDuration = res.response?.data.targetDuration
-        dataList.push(data.totalDuration)
+        selfUser.value.totalDuration = res.response?.data.totalDuration
+        selfUser.value.targetDuration = res.response?.data.targetDuration
+        dataList.value.push(Math.floor(selfUser.value.totalDuration/60))
     }
 })
 
 //获取打卡排名
-onMounted(async()=>{
+const getCardList = async()=>{
     const response = await checkoutList({
-      grade: data.grade,
+      grade: selfUser.value.grade as number,
       pageSize: 40,
       pageNum: 1
     })
-    
     const responseData = response.response
     console.log('responseData',responseData);
     
@@ -97,21 +102,14 @@ onMounted(async()=>{
         }
       }) as User[]
       userList.value.sort((a, b) => b.totalDuration - a.totalDuration)
-      userList.value = userList.value.filter(user => user.grade === data.grade)
     }
-    console.log(userList.value);
-    
     userList.value.forEach((item,index)=>{
-        if(item.nickname===data.username){
-            dataList.push(index+1)
+        if(item.nickname===selfUser.value.nickname){
+            dataList.value.push(index+1)
         }
     })
-    console.log(dataList);
-    
-})
-
-
-
+    dataList.value.push(0)
+}
 
 </script>
 
