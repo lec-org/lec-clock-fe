@@ -5,7 +5,7 @@
         <a-form
           class="register-form__content"
           :model="registerInfo"
-          @submit-success="handleSubmit"
+          @submit-success="debouncedRegister"
           layout="vertical"
         >
           <a-space class="board" direction="vertical">
@@ -75,7 +75,7 @@
                 placeholder="邮箱是必填项"
                 v-model="registerInfo.email"
               ></a-input>
-              <a-button type="primary" shape="round" @click="sendEmail"
+              <a-button type="primary" shape="round" @click="debouncedEmail"
                 >发送验证码</a-button
               >
             </a-form-item>
@@ -113,6 +113,8 @@
 import { useLoginStore } from '../store/login'
 import { userRegisterService, userCodeService } from '@/services'
 import { Message } from '@arco-design/web-vue'
+import { debounceAsync } from '@/services/debounce'
+
 import router from '@/router'
 const loginStore = useLoginStore()
 const { activeForm, registerInfo } = storeToRefs(loginStore)
@@ -122,17 +124,17 @@ const checkToLogin = () => {
 }
 const handleSubmit = async (info: Record<string, any>) => {
   await userRegisterService(info)
-
   Message.success('注册成功')
   router.push('/')
 }
+const debouncedRegister = debounceAsync(handleSubmit,1000)
 
 const sendEmail = async () => {
   const { email } = unref(registerInfo)
-
   await userCodeService(email)
   //   console.log(res)
 }
+const debouncedEmail = debounceAsync(sendEmail,1000)
 </script>
 <style lang="scss">
 .register-form {

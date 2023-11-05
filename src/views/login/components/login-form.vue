@@ -4,7 +4,7 @@
       <a-form
         class="login-form__content"
         :model="loginInfo"
-        @submit-success="handleSubmit"
+        @submit-success="debouncedLogin"
         layout="vertical"
       >
         <a-space class="board" direction="vertical">
@@ -66,6 +66,7 @@
 import { useLoginStore } from '../store/login'
 import { userLoginService } from '@/services'
 import { Message } from '@arco-design/web-vue'
+import { debounceAsync } from '@/services/debounce'
 import router from '@/router'
 
 const loginStore = useLoginStore()
@@ -75,6 +76,7 @@ const isRemembered = ref(false)
 const checkToRegister = () => {
     activeForm.value = 'register'
 }
+
 const handleSubmit = async (info: Record<string, any>) => {
   try {
     const res = await userLoginService(info)
@@ -96,7 +98,7 @@ const handleSubmit = async (info: Record<string, any>) => {
     Message.error('登录失败：' + error)
   }
 }
-
+const debouncedLogin = debounceAsync(handleSubmit,1000)
 
 </script>
 
