@@ -11,32 +11,43 @@ import { Message } from '@arco-design/web-vue';
 
 const userMain = userMainStore()
 const { userList,selfUser,dataList } = storeToRefs(userMain)
+import { request } from '@/services/request'
 
 const isLoggedIn = ref(false)
 // 检查 token 是否存在
 const token = localStorage.getItem('token') || ""
 const checkToken = async() => {
   isLoggedIn.value = !!token
-  if(token){
-    const res = await checkoutToken(token)
-    if(!res.response?.data ){
-        Message.error("token过期了")
-        router.push('/login')
-    }else if(res.response?.error.message!=="请求超时"){
-        Message.error("token过期了")
-        router.push('/login')
-    }
-  }
 }
-
+const name = localStorage.getItem('name')
+const token = localStorage.getItem('token')
 const expandSidebar = ref(false) // 响应式数据，控制右边栏的展开和收起状态
 
 // 页面加载时检查 token
 onMounted(checkToken)
+
+const startClockIn = async () => {
+  try {
+    const response = await axios.post(
+      'http://58.87.105.56:8080/clock/clock',
+      null,
+      {
+        headers: {
+          token: token
+        }
+      }
+    )
+    console.log(response.data) // 处理响应数据
+  } catch (error) {
+    console.error(error)
+  }
+}
+
 const toggleSidebar = async () => {
   expandSidebar.value = !expandSidebar.value
 }
 onMounted(() => {
+  checkToken()
   const sidebar = document.getElementById('sidebar')
   if (sidebar) {
     sidebar.style.width = '0'
@@ -108,31 +119,47 @@ const getCardList = async()=>{
 
 <template>
   <basic-layout>
-    <a-layout class="home-view">
-      <a-layout-header>
-        <clock-info />
-      </a-layout-header>
+    <div class="content-wrapper">
+      <div class="left">
+        <a-layout>
+          <a-layout-header>
+            <clock-info />
+          </a-layout-header>
 
-      <a-layout-content class="content">
-        <clock-button />
-        <line-chart />
-      </a-layout-content>
+          <a-layout-content class="content">
+            <clock-button />
+            <line-chart />
+          </a-layout-content>
 
-      <a-layout-footer> </a-layout-footer>
-    </a-layout>
+          <a-layout-footer> </a-layout-footer>
+        </a-layout>
+      </div>
+    </div>
+
+    <template #right-sidebar>
+      <right-sidebar></right-sidebar>
+    </template>
   </basic-layout>
 </template>
 
 <style scoped lang="scss">
-.home-view {
-  padding: 14px;
+.content-wrapper {
+  display: flex;
   height: 100%;
+  gap: 24px;
+  .left {
+    flex: 2;
+    width: 100%;
 
-  .content {
-    display: flex;
-    align-items: center;
-    gap: 12px;
-    max-height: 300px;
+    .content {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      max-height: 300px;
+    }
+  }
+
+  .right {
   }
 }
 </style>

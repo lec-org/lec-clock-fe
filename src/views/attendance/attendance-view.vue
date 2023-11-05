@@ -1,5 +1,5 @@
 <template>
-  <basic-layout>
+  <basic-layout hide-right-sidebar>
     <rank-list></rank-list>
   </basic-layout>
 </template>

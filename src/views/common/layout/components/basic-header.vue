@@ -33,7 +33,12 @@
 </template>
 
 <script setup lang="ts">
+import router from '@/router'
 import { avatarDropdownItems } from '../configs'
+
+const routeTo = (str: string) => {
+  router.push(str)
+}
 </script>
 
 <style scoped lang="scss">
@@ -49,6 +54,7 @@ $header-height: 64px;
   .logo {
     display: flex;
     gap: 4px;
+    cursor: pointer;
     .pic {
       height: 74px;
     }

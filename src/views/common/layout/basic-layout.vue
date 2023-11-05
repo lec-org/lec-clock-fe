@@ -1,17 +1,34 @@
 <template>
   <a-layout class="basic-layout">
-    <a-layout-header class="header">
-      <basic-header></basic-header>
-    </a-layout-header>
+    <template v-if="!props.hideHeader">
+      <a-layout-header class="header">
+        <basic-header></basic-header>
+      </a-layout-header>
+    </template>
 
     <div class="main">
-      <a-layout-sider class="sider" collapsible breakpoint="xl">
-        <basic-sidebar></basic-sidebar>
-      </a-layout-sider>
+      <template v-if="!props.hideLeftSidebar">
+        <a-layout-sider class="sider" collapsible breakpoint="xl">
+          <basic-left-sidebar></basic-left-sidebar>
+        </a-layout-sider>
+      </template>
 
       <a-layout-content class="content">
         <slot></slot>
       </a-layout-content>
+
+      <template v-if="!props.hideRightSidebar">
+        <a-layout-sider
+          class="sider right-sider"
+          :hide-trigger="false"
+          collapsible
+          breakpoint="xl"
+        >
+          <basic-right-sidebar>
+            <slot name="right-sidebar"></slot>
+          </basic-right-sidebar>
+        </a-layout-sider>
+      </template>
     </div>
 
     <a-layout-footer class="footer"></a-layout-footer>
@@ -19,8 +36,14 @@
 </template>
 
 <script setup lang="ts">
-import BasicSidebar from './components/basic-sidebar.vue'
+import BasicLeftSidebar from './components/basic-left-sidebar.vue'
 import BasicHeader from './components/basic-header.vue'
+
+const props = defineProps<{
+  hideLeftSidebar?: boolean
+  hideRightSidebar?: boolean
+  hideHeader?: boolean
+}>()
 </script>
 
 <style scoped lang="scss">
@@ -71,7 +94,15 @@ $common-radius: 4px;
       overflow: auto;
       box-shadow: 1px 1px 6px #aaa;
       border-radius: $common-radius;
+      padding: $common-gap;
       overflow: hidden;
+    }
+
+    .right-sider {
+      min-width: 320px;
+      max-width: 320px;
+      padding: $common-gap;
+      overflow-x: hidden;
     }
   }
 

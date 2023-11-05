@@ -1,57 +1,24 @@
 <template>
   <div class="ranking-list">
-    <div class="nav-bar">
-      <div
-        class="nav-item"
-        :class="{ active: currentGrade === 1 }"
-        @click="currentGrade = 1"
-      >
-        大一
-      </div>
-      <div
-        class="nav-item"
-        :class="{ active: currentGrade === 2 }"
-        @click="currentGrade = 2"
-      >
-        大二
-      </div>
-      <div
-        class="nav-item"
-        :class="{ active: currentGrade === 3 || currentGrade === 4 }"
-        @click="currentGrade = 3"
-      >
-        其他年级
-      </div>
-    </div>
-    <div class="table-header">
-      <div class="table2-cell">排名</div>
-      <div class="table-cell">ID</div>
-      <div class="table2-cell">当前时长</div>
-      <div class="table-cell">目标时长</div>
-      <div class="table-cell">完成度</div>
-      <div class="table3-cell">状态</div>
-    </div>
-    <div v-for="(user, index) in users" :key="index" class="ranking-item">
-      <div class="table-cell" style="position: relative; left: 3em">
-        {{ index + 1 }}
-      </div>
-      <img :src="user.avatar" :alt="user.nickname" class="avatar" />
-      <div class="table-cell">{{ user.nickname }}</div>
-      <div class="table-cell">{{ user.totalDuration }}小时</div>
-      <div class="table-cell">{{ user.targetDuration }}小时</div>
-      <div class="table-cell">
-        {{ ((user.totalDuration / user.targetDuration) * 100).toFixed(0) }}%
-      </div>
-      <div class="table-cell">
-        <div
-          :class="{
-            'status-circle': true,
-            'status-green': user.status === 1,
-            'status-red': user.status === 0
-          }"
-        ></div>
-      </div>
-    </div>
+    <a-radio-group class="radio-group" type="button">
+      <template v-for="grade in rankListGrades" :key="grade.value">
+        <a-radio :value="grade.value" @click="handleGradeChange(grade.value)">
+          {{ grade.text }}
+        </a-radio>
+      </template>
+    </a-radio-group>
+
+    <a-table :data="listData">
+      <template #columns>
+        <template v-for="col in rankListColumns" :key="col.dataIndex">
+          <a-table-column :title="col.title" :data-index="col.dataIndex">
+            <template #cell="{ record }" v-if="col.render">
+              <div v-html="col.render?.(record)"></div>
+            </template>
+          </a-table-column>
+        </template>
+      </template>
+    </a-table>
   </div>
 </template>
 
