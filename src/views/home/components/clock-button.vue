@@ -20,11 +20,15 @@
 </template>
 
 <script setup lang="ts">
-import { request } from '@/services/request'
 import { Message } from '@arco-design/web-vue'
 import { ref, onMounted } from 'vue'
 import dayjs from 'dayjs'
 import { startClockInService } from '@/services';
+import { userMainStore } from '../store';
+
+
+const userMain = userMainStore()
+const { selfUser } = storeToRefs(userMain)
 
 // 时区偏差修正
 const timeZoneOffset = -8 * 1000 * 60 * 60
@@ -36,19 +40,23 @@ const clockingTime = ref(timeZoneOffset)
 const singleInterval = ref<number>()
 
 const token = localStorage.getItem('token') || ""
-const checkToken = () => {
-  isLoggedIn.value = !!token
-}
 
 const startClockIn = async () => {
   try {
     const response = await startClockInService(token)
-    console.log(response);
     isClocking.value = !isClocking.value
+    selfUser.value.status = response.response?.data.status
     if(response.response?.data.status==1){
         Message.success("成功上卡")
+        singleInterval.value = setInterval(() => {
+        clockingTime.value++
+      }, 1000)
     }else{
-        Message.success("成功下卡")
+        console.log(response.response);
+        Message.success(`成功下卡，本周已经成功打卡${response.response?.data.totalDuration}分钟`)
+        clearInterval(singleInterval.value)
+        singleInterval.value = 0
+        clockingTime.value = timeZoneOffset
     }
   } catch (error) {
     Message.error('未知错误')
@@ -56,7 +64,19 @@ const startClockIn = async () => {
   }
 }
 
-onMounted(checkToken)
+onMounted(()=>{
+    // console.log(selfUser.value);
+    isClocking.value = selfUser.value.status===1?true:false
+})
+watchEffect(()=>{
+    isClocking.value = selfUser.value.status===1?true:false
+    if(isClocking.value){
+        singleInterval.value = setInterval(() => {
+        clockingTime.value++
+      }, 1000)
+    }
+})
+
 </script>
 
 <style scoped lang="scss">

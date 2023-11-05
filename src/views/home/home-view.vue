@@ -4,7 +4,13 @@ import BasicLayout from '@/views/common/layout/basic-layout.vue'
 import clockInfo from './components/clock-info.vue'
 import { checkoutToken } from '@/services';
 import router from '@/router';
+import { checkoutInfo, checkoutList, getUserInfoService } from '@/services';
+import { User } from './type/index'
+import { userMainStore } from './store'
 import { Message } from '@arco-design/web-vue';
+
+const userMain = userMainStore()
+const { userList,selfUser,dataList } = storeToRefs(userMain)
 
 const isLoggedIn = ref(false)
 // 检查 token 是否存在
@@ -13,7 +19,10 @@ const checkToken = async() => {
   isLoggedIn.value = !!token
   if(token){
     const res = await checkoutToken(token)
-    if(!res.response?.data || res.response?.error.message!=="请求超时"){
+    if(!res.response?.data ){
+        Message.error("token过期了")
+        router.push('/login')
+    }else if(res.response?.error.message!=="请求超时"){
         Message.error("token过期了")
         router.push('/login')
     }
@@ -34,6 +43,67 @@ onMounted(() => {
     sidebar.style.height = '0'
   }
 })
+
+
+const id = localStorage.getItem('id') || ""
+//更新个人信息
+onMounted(async()=>{
+    try{
+        const res = await getUserInfoService({id,token})
+        const info = res.response?.data
+        if(info){
+            selfUser.value.nickname = info.nickname
+            selfUser.value.grade = info.grade
+            getCardList()
+        }else{
+            Message.error("获取用户信息失败")
+        }
+    }catch(error){
+        console.error()
+    }
+})
+
+
+//获取打卡时长
+onMounted(async()=>{
+    const res = await checkoutInfo({token,id})
+    if(res.response?.code===200){
+        selfUser.value.totalDuration = res.response?.data.totalDuration
+        selfUser.value.targetDuration = res.response?.data.targetDuration
+        selfUser.value.status = res.response?.data.status
+        dataList.value.push(Math.floor(selfUser.value.totalDuration/60))
+    }
+})
+
+//获取打卡排名
+const getCardList = async()=>{
+    const response = await checkoutList({
+      grade: selfUser.value.grade as number,
+      pageSize: 40,
+      pageNum: 1
+    })
+    const responseData = response.response
+    // console.log('responseData',responseData);
+    if(responseData?.code===200){
+        userList.value = responseData.data.rows.map((row: any) => {
+        return {
+          avatar: row.avatar,
+          nickname: row.nickname,
+          totalDuration: (row.totalDuration / 60).toFixed(1),
+          targetDuration: row.targetDuration / 60,
+          grade: row.grade,
+          status: row.status
+        }
+      }) as User[]
+      userList.value.sort((a, b) => b.totalDuration - a.totalDuration)
+    }
+    userList.value.forEach((item,index)=>{
+        if(item.nickname===selfUser.value.nickname){
+            dataList.value.push(index+1)
+        }
+    })
+    dataList.value.push(0)
+}
 </script>
 
 <template>
