@@ -18,7 +18,7 @@
       </div>
 
       <div class="statistics">
-        <template v-for="item in clockInfoDataList" :key="item.key">
+        <template v-for="(item,index) in clockInfoDataList" :key="item.key">
           <div class="statistics-item">
             <div class="left">
               <img :src="item.icon" />
@@ -27,7 +27,7 @@
             <div class="right">
               <div class="title">{{ item.title }}</div>
               <div class="data">
-                <span class="current-value">30{{ item.unit }}</span>
+                <span class="current-value">{{Math.floor(dataList[index]/60)}} {{ item.unit }}</span>
                 <span class="max-value">
                   /{{ item.maxValue }}{{ item.unit }}
                 </span>
@@ -41,14 +41,18 @@
 </template>
 
 <script setup lang="ts">
-import { checkoutInfo, getUserInfoService } from '@/services';
+import { checkoutInfo, checkoutList, getUserInfoService } from '@/services';
 import { clockInfoDataList, weatherInfoList } from '../configs'
+import { User } from '../type/index'
 
+const userList = ref<User[]>([])
 const data = reactive({
   username: '',
   totalDuration:'',
-  targetDuration:''
+  targetDuration:'',
+  grade:0
 })
+const dataList:any[] = []
 const id = localStorage.getItem('id') || ""
 const token = localStorage.getItem("token") || ""
 //更新个人信息
@@ -56,7 +60,7 @@ onMounted(async()=>{
     const res = await getUserInfoService({id,token})
     const info = res.response?.data
     data.username = info.nickname
-    
+    data.grade = info.grade
 })
 
 
@@ -66,8 +70,48 @@ onMounted(async()=>{
     if(res.response?.code===200){
         data.totalDuration = res.response?.data.totalDuration
         data.targetDuration = res.response?.data.targetDuration
+        dataList.push(data.totalDuration)
     }
 })
+
+//获取打卡排名
+onMounted(async()=>{
+    const response = await checkoutList({
+      grade: data.grade,
+      pageSize: 40,
+      pageNum: 1
+    })
+    
+    const responseData = response.response
+    console.log('responseData',responseData);
+    
+    if(responseData?.code===200){
+        userList.value = responseData.data.rows.map((row: any) => {
+        return {
+          avatar: row.avatar,
+          nickname: row.nickname,
+          totalDuration: (row.totalDuration / 60).toFixed(1),
+          targetDuration: row.targetDuration / 60,
+          grade: row.grade,
+          status: row.status
+        }
+      }) as User[]
+      userList.value.sort((a, b) => b.totalDuration - a.totalDuration)
+      userList.value = userList.value.filter(user => user.grade === data.grade)
+    }
+    console.log(userList.value);
+    
+    userList.value.forEach((item,index)=>{
+        if(item.nickname===data.username){
+            dataList.push(index+1)
+        }
+    })
+    console.log(dataList);
+    
+})
+
+
+
 
 </script>
 

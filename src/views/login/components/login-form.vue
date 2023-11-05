@@ -72,7 +72,9 @@ const loginStore = useLoginStore()
 const { activeForm, loginInfo } = storeToRefs(loginStore)
 const isActive = computed(() => activeForm.value === 'login')
 const isRemembered = ref(false)
-
+const checkToRegister = () => {
+    activeForm.value = 'register'
+}
 const handleSubmit = async (info: Record<string, any>) => {
   try {
     const res = await userLoginService(info)
@@ -95,7 +97,7 @@ const handleSubmit = async (info: Record<string, any>) => {
   }
 }
 
-const checkToRegister = () => {}
+
 </script>
 
 <style lang="scss">

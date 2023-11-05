@@ -1,6 +1,7 @@
 import type { RequestError } from '../request'
 
 export interface ResponseData<T = any> {
+[x: string]: any
   code: number
   msg: string
   data: T

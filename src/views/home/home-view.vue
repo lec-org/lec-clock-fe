@@ -13,7 +13,7 @@ const checkToken = async() => {
   isLoggedIn.value = !!token
   if(token){
     const res = await checkoutToken(token)
-    if(!res.response?.data){
+    if(!res.response?.data || res.response?.error.message!=="请求超时"){
         Message.error("token过期了")
         router.push('/login')
     }
