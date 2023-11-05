@@ -25,7 +25,7 @@
 <script lang="ts" setup>
 import { ref, computed, watch } from 'vue'
 import axios from 'axios'
-import { checkoutList } from '@/services';
+import { checkoutList } from '@/services'
 interface User {
   avatar: string
   nickname: string

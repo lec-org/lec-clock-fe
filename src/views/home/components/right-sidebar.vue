@@ -22,7 +22,7 @@
 </template>
 
 <script setup lang="ts">
-import { platforms } from '@/views/common/layout/configs'
+import { platforms } from '../configs'
 import { Message } from '@arco-design/web-vue'
 
 // TODO: 跳转到用户配置页，可以编辑内容

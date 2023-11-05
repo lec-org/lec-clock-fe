@@ -1,7 +1,7 @@
 <template>
   <div class="basic-header">
     <div class="left">
-      <div class="logo">
+      <div class="logo" @click="routeTo('/home')">
         <img class="pic" src="/common/lec@640x640.png" alt="这是logo" />
         <div class="text">
           <i> 乐程聚合平台 </i>

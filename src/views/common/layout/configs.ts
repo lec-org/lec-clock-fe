@@ -11,15 +11,23 @@ export const sidebarItems = [
       router.push('/home')
     }
   },
-
   {
     key: '2',
-    icon: 'icon-calendar',
-    text: '打卡排行',
+    icon: 'icon-question-circle',
+    text: '更多功能',
     clickEvent: () => {
-      router.push('/attendance')
+      Message.info('开发中，欢迎贡献 good idea~')
     }
   }
+
+  // {
+  //   key: '2',
+  //   icon: 'icon-calendar',
+  //   text: '打卡排行',
+  //   clickEvent: () => {
+  //     router.push('/attendance')
+  //   }
+  // }
 ]
 
 export const avatarDropdownItems = [
