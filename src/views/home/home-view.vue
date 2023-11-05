@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import { ref, onMounted } from 'vue'
 import BasicLayout from '@/views/common/layout/basic-layout.vue'
+import RankList from './components/rank-list.vue'
 import clockInfo from './components/clock-info.vue'
 import { request } from '@/services/request'
 
@@ -42,22 +43,28 @@ onMounted(() => {
 
 <template>
   <basic-layout>
-    <div class="content-wrapper">
-      <div class="left">
-        <a-layout>
-          <a-layout-header>
-            <clock-info />
-          </a-layout-header>
+    <template #default>
+      <div class="content-wrapper">
+        <div class="left">
+          <a-layout>
+            <a-layout-header class="header">
+              <clock-info />
+            </a-layout-header>
 
-          <a-layout-content class="content">
-            <clock-button />
-            <line-chart />
-          </a-layout-content>
+            <a-layout-content class="content">
+              <clock-button />
+              <line-chart />
+            </a-layout-content>
 
-          <a-layout-footer> </a-layout-footer>
-        </a-layout>
+            <a-layout-footer>
+              <rank-list></rank-list>
+            </a-layout-footer>
+
+            <a-layout-footer> </a-layout-footer>
+          </a-layout>
+        </div>
       </div>
-    </div>
+    </template>
 
     <template #right-sidebar>
       <right-sidebar></right-sidebar>
@@ -70,6 +77,10 @@ onMounted(() => {
   display: flex;
   height: 100%;
   gap: 24px;
+
+  .header {
+    border-bottom: 1px solid #3333;
+  }
   .left {
     flex: 2;
     width: 100%;

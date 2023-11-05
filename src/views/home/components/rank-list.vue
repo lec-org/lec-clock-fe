@@ -11,7 +11,7 @@
       </template>
     </a-radio-group>
 
-    <a-table :data="listData">
+    <a-table :data="listData" :pagination="false" :scroll="{ y: 170 }">
       <template #columns>
         <template v-for="col in rankListColumns" :key="col.dataIndex">
           <a-table-column :title="col.title" :data-index="col.dataIndex">
@@ -29,18 +29,65 @@
 import { rankListColumns, rankListGrades } from '../configs'
 import { ref } from 'vue'
 import { request } from '@/services/request'
+import { RankListRow } from '../type'
 
-// TODO: 临时mock数据
-const listData = ref([])
+// TODO: 临时mock数据，类型有一点点问题，调真实数据的时候记得改改
+const listData = ref<Array<RankListRow>>([
+  {
+    rank: 1,
+    avatar: '',
+    nickname: 'asd',
+    currentTime: 1,
+    targetTime: 23,
+    completionRate: 1 / 23,
+    status: 1
+  },
+  {
+    rank: 2,
+    avatar: '',
+    nickname: 'asd',
+    currentTime: 1,
+    targetTime: 23,
+    completionRate: 1 / 23,
+    status: 1
+  },
+  {
+    rank: 3,
+    avatar: '',
+    nickname: 'asd',
+    currentTime: 1,
+    targetTime: 23,
+    completionRate: 1 / 23,
+    status: 1
+  },
+  {
+    rank: 4,
+    avatar: '',
+    nickname: 'asd',
+    currentTime: 1,
+    targetTime: 23,
+    completionRate: 1 / 23,
+    status: 1
+  },
+  {
+    rank: 5,
+    avatar: '',
+    nickname: 'asd',
+    currentTime: 1,
+    targetTime: 23,
+    completionRate: 1 / 23,
+    status: 1
+  }
+])
 
 const handleGradeChange = async (grade: number | string) => {
   console.log(grade)
-  const res = await request.post('/api/clock/list', {
-    grade: grade,
-    pageSize: 40,
-    pageNum: 1
-  })
-  console.log('grade res', res)
+  // const res = await request.post('/api/clock/list', {
+  //   grade: grade,
+  //   pageSize: 40,
+  //   pageNum: 1
+  // })
+  // console.log('grade res', res)
 }
 
 // const filteredUsers = watch(users, () => {

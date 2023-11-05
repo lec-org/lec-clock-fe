@@ -1,5 +1,3 @@
-import { h } from 'vue'
-
 interface RankListRow {
   rank: number | string
   avatar: string
