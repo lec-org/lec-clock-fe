@@ -22,7 +22,6 @@
 </template>
 
 <script setup lang="ts">
-import router from '@/router'
 import { platforms } from '@/views/common/layout/configs'
 import { Message } from '@arco-design/web-vue'
 
@@ -37,8 +36,7 @@ const routeToUser = () => {
 $gap: 14px;
 $icon-size: 24px;
 .right-side {
-  max-width: 320px;
-  min-width: 320px;
+  width: 100%;
   height: 100%;
   position: relative;
 
@@ -67,8 +65,8 @@ $icon-size: 24px;
       flex-wrap: wrap;
       .item {
         text-align: center;
-        max-width: 78px;
-        min-width: 78px;
+        max-width: 72px;
+        min-width: 72px;
         margin-bottom: $gap;
         text-overflow: ellipsis;
         overflow: hidden;
