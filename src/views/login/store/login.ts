@@ -49,15 +49,18 @@ export const useLoginStore = defineStore('loginStore', () => {
   const setToken = (newToken: string) => {
     token.value = newToken
     localStorage.setItem('token', token.value)
-    localStorage.setItem('name', loginInfo.value.username)
     //loginInfo
+  }
+  const setId = (newId:string)=>{
+    localStorage.setItem('id', newId)
   }
   return {
     activeForm,
     loginInfo,
     registerInfo,
-    changeActiveForm,
     token,
-    setToken
+    changeActiveForm,
+    setToken,
+    setId
   }
 },{persist: true})

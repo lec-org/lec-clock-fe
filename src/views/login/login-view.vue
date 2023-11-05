@@ -9,10 +9,10 @@
 
 <script setup lang="ts"></script>
 
-<style lang="scss" scoped>
+
+<style lang="scss">
 .login {
-  position: fixed;
-  left: 0;
+  position: relative;
   height: 0;
   height: 100vh;
   width: 100vw;
