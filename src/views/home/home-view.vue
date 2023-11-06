@@ -7,45 +7,32 @@ import { checkoutToken } from '@/services'
 import router from '@/router'
 import { checkoutInfo, checkoutList, getUserInfoService } from '@/services'
 import { User } from './type/index'
-import { userMainStore } from './store'
 import { Message } from '@arco-design/web-vue'
 
-const userMain = userMainStore()
-const { userList, selfUser, dataList } = storeToRefs(userMain)
-import { request } from '@/services/request'
+const userList:Ref<User[]> = ref<Array<User>>([])
+const selfUser:User = reactive<User>({
+    avatar: '',
+    nickname: '',
+    totalDuration: 0,
+    targetDuration: 0,
+    grade: 0,
+    status: 0
+})
+const dataList:Ref<any[]> = ref<any>([])
 
-const isLoggedIn = ref(false)
 // 检查 token 是否存在
 const token = localStorage.getItem('token') || ''
 const checkToken = async () => {
-  isLoggedIn.value = !!token
+    const res = await checkoutToken(token)
+    if(res.response?.data === false || res.error?.message === "网络错误"){
+        localStorage.removeItem("token")
+        Message.error("token过期啦")
+        router.push('/login')
+    }
 }
-// const name = localStorage.getItem('name')
-// const expandSidebar = ref(false) // 响应式数据，控制右边栏的展开和收起状态
 
 // 页面加载时检查 token
-onMounted(checkToken)
 
-// const startClockIn = async () => {
-//   try {
-//     const response = await axios.post(
-//       'http://58.87.105.56:8080/clock/clock',
-//       null,
-//       {
-//         headers: {
-//           token: token
-//         }
-//       }
-//     )
-//     console.log(response.data) // 处理响应数据
-//   } catch (error) {
-//     console.error(error)
-//   }
-// }
-
-// const toggleSidebar = async () => {
-//   expandSidebar.value = !expandSidebar.value
-// }
 onMounted(() => {
   checkToken()
   const sidebar = document.getElementById('sidebar')
@@ -62,9 +49,9 @@ onMounted(async () => {
     const res = await getUserInfoService({ id, token })
     const info = res.response?.data
     if (info) {
-      selfUser.value.nickname = info.nickname
-      selfUser.value.grade = info.grade
-      getCardList()
+      selfUser.nickname = info.nickname
+      selfUser.grade = info.grade
+      getCardList()      
     } else {
       Message.error('获取用户信息失败')
     }
@@ -77,17 +64,17 @@ onMounted(async () => {
 onMounted(async () => {
   const res = await checkoutInfo({ token, id })
   if (res.response?.code === 200) {
-    selfUser.value.totalDuration = res.response?.data.totalDuration
-    selfUser.value.targetDuration = res.response?.data.targetDuration
-    selfUser.value.status = res.response?.data.status
-    dataList.value.push(Math.floor(selfUser.value.totalDuration / 60))
+    selfUser.totalDuration = res.response?.data.totalDuration
+    selfUser.targetDuration = res.response?.data.targetDuration
+    selfUser.status = res.response?.data.status
+    dataList.value.push(Math.floor(selfUser.totalDuration / 60))
   }
 })
 
 //获取打卡排名
 const getCardList = async () => {
   const response = await checkoutList({
-    grade: selfUser.value.grade as number,
+    grade: selfUser.grade as number,
     pageSize: 40,
     pageNum: 1
   })
@@ -95,22 +82,24 @@ const getCardList = async () => {
   // console.log('responseData',responseData);
   if (responseData?.code === 200) {
     userList.value = responseData.data.rows.map((row: any) => {
-      return {
+        return {
         avatar: row.avatar,
         nickname: row.nickname,
-        totalDuration: (row.totalDuration / 60).toFixed(1),
+        totalDuration: Number((row.totalDuration / 60).toFixed(1)),
         targetDuration: row.targetDuration / 60,
-        grade: row.grade,
+        grade: selfUser.grade,
         status: row.status
       }
     }) as User[]
-    userList.value.sort((a, b) => b.totalDuration - a.totalDuration)
+    userList.value.sort((a:User, b:User) => b.totalDuration - a.totalDuration)
   }
-  userList.value.forEach((item, index) => {
-    if (item.nickname === selfUser.value.nickname) {
+  userList.value.forEach((item:User, index:number) => {
+    if (item.nickname === selfUser.nickname) {
       dataList.value.push(index + 1)
     }
   })
+  console.log(userList);
+//   TODO:代办没有完成
   dataList.value.push(0)
 }
 </script>
@@ -122,16 +111,16 @@ const getCardList = async () => {
         <div class="left">
           <a-layout>
             <a-layout-header class="header">
-              <clock-info />
+              <clock-info :selfUser="selfUser" :dataList="dataList"/>
             </a-layout-header>
 
             <a-layout-content class="content">
-              <clock-button />
+              <clock-button :selfUser="selfUser"/>
               <line-chart />
             </a-layout-content>
 
             <a-layout-footer>
-              <rank-list></rank-list>
+              <rank-list :userList="userList" :selfUser="selfUser"></rank-list>
             </a-layout-footer>
 
             <a-layout-footer> </a-layout-footer>

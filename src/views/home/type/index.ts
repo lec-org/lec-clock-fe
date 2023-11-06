@@ -1,4 +1,5 @@
 export interface User {
+[x: string]: any
     avatar: string
     nickname: string
     totalDuration: number 

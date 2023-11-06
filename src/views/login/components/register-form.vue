@@ -68,7 +68,8 @@
               label="邮箱"
               :rules="[
                 { required: true, message: '邮箱是必填项' },
-                { type: 'email', message: '邮箱格式不正确' }
+                { type: 'email', message: '邮箱格式不正确' },
+                { minLength:1 ,message:'邮箱不能为空' }
               ]"
             >
               <a-input
@@ -112,7 +113,7 @@
 <script setup lang="ts">
 import { useLoginStore } from '../store/login'
 import { userRegisterService, userCodeService } from '@/services'
-import { Message } from '@arco-design/web-vue'
+import { Message } from '@arco-design/web-vue';
 import { debounceAsync } from '@/services/debounce'
 
 import router from '@/router'
@@ -127,14 +128,18 @@ const handleSubmit = async (info: Record<string, any>) => {
   Message.success('注册成功')
   router.push('/')
 }
-const debouncedRegister = debounceAsync(handleSubmit,1000)
+const debouncedRegister = debounceAsync(handleSubmit,500)
 
 const sendEmail = async () => {
   const { email } = unref(registerInfo)
+  if(email===''){
+    Message.error('邮箱不能为空')
+    return;
+  }
   await userCodeService(email)
   //   console.log(res)
 }
-const debouncedEmail = debounceAsync(sendEmail,1000)
+const debouncedEmail = debounceAsync(sendEmail,500)
 </script>
 <style lang="scss">
 .register-form {

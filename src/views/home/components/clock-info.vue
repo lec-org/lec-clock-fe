@@ -42,10 +42,8 @@
 
 <script setup lang="ts">
 import { clockInfoDataList, weatherInfoList } from '../configs'
-import { userMainStore } from '../store'
-
-const userMain = userMainStore()
-const { selfUser,dataList } = storeToRefs(userMain)
+const props = defineProps(['selfUser','dataList'])
+const selfUser = props.selfUser
 
 </script>
 

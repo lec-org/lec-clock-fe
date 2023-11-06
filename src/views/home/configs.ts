@@ -284,7 +284,7 @@ export const rankListColumns = [
   {
     title: '用户信息',
     dataIndex: 'userInfo',
-    render: (row: RankListRow) => `<img src="${row.avatar}" alt="头像"/>`
+    render: (row: RankListRow) => `<img src="${row.avatar}" alt="头像" style="width:50px; height:50px;border-radius:50%;"/>`
   },
   {
     title: '当前时长',
@@ -296,25 +296,23 @@ export const rankListColumns = [
   },
   {
     title: '完成度',
-    dataIndex: 'completionRate'
+    dataIndex: 'completionRate',
+    render: (row:RankListRow) => `${row.completionRate !==0?row.completionRate*100+'%':row.completionRate}`
   },
   {
     title: '状态',
-    dataIndex: 'status'
+    dataIndex: 'status',
+    render:(row: RankListRow) => `${row.status === 1 ? "内卷ing":"休息中"}`
   }
 ]
 
 export const rankListGrades = [
   {
-    value: 2020,
-    text: '2020级'
-  },
-  {
-    value: 2021,
-    text: '2021级'
-  },
-  {
-    value: 2022,
+    value: 2,
     text: '2022级'
+  },
+  {
+    value:1,
+    text:'2023级'
   }
 ]

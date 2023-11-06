@@ -77,6 +77,29 @@ const checkToRegister = () => {
     activeForm.value = 'register'
 }
 
+//记住我
+watch(isRemembered,()=>{
+    if(isRemembered.value===true){
+        localStorage.setItem('username',loginInfo.value.username)
+        localStorage.setItem('password',loginInfo.value.password)
+    }else{
+        let username = localStorage.getItem('username') || ""
+        if(username !== ""){
+            localStorage.removeItem('username')
+            localStorage.removeItem('password')
+        }
+    }
+})
+const initLoginInfo = ()=>{
+    loginInfo.value.username = localStorage.getItem('username') || ""
+    loginInfo.value.password = localStorage.getItem('password') || ""
+    if(loginInfo.value.username!==""){
+        isRemembered.value = true
+    }
+}
+initLoginInfo()
+
+
 const handleSubmit = async (info: Record<string, any>) => {
   try {
     const res = await userLoginService(info)
@@ -98,7 +121,7 @@ const handleSubmit = async (info: Record<string, any>) => {
     Message.error('登录失败：' + error)
   }
 }
-const debouncedLogin = debounceAsync(handleSubmit,1000)
+const debouncedLogin = debounceAsync(handleSubmit,500)
 
 </script>
 

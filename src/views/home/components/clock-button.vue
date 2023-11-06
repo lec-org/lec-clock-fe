@@ -21,20 +21,19 @@
 
 <script setup lang="ts">
 import { Message } from '@arco-design/web-vue'
-import { ref, onMounted } from 'vue'
+import { ref, onMounted,defineProps } from 'vue'
 import dayjs from 'dayjs'
 import { startClockInService } from '@/services';
-import { userMainStore } from '../store';
 
+const props = defineProps(['selfUser'])
 
-const userMain = userMainStore()
-const { selfUser } = storeToRefs(userMain)
+// eslint-disable-next-line vue/no-dupe-keys
+const { selfUser }  = props
 
 // 时区偏差修正
 const timeZoneOffset = -8 * 1000 * 60 * 60
 // TODO: 查询当前打卡状态
 const isClocking = ref(false)
-const isLoggedIn = ref(false)
 const clockingTime = ref(timeZoneOffset)
 /** 计时器单例 */
 const singleInterval = ref<number>()
@@ -45,7 +44,7 @@ const startClockIn = async () => {
   try {
     const response = await startClockInService(token)
     isClocking.value = !isClocking.value
-    selfUser.value.status = response.response?.data.status
+    selfUser.status = response.response?.data.status
     if(response.response?.data.status==1){
         Message.success("成功上卡")
         singleInterval.value = setInterval(() => {
@@ -65,11 +64,10 @@ const startClockIn = async () => {
 }
 
 onMounted(()=>{
-    // console.log(selfUser.value);
-    isClocking.value = selfUser.value.status===1?true:false
+    isClocking.value = selfUser.status===1?true:false
 })
 watchEffect(()=>{
-    isClocking.value = selfUser.value.status===1?true:false
+    isClocking.value = selfUser.status===1?true:false
     if(isClocking.value){
         singleInterval.value = setInterval(() => {
         clockingTime.value++

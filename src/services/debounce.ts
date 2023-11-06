@@ -1,4 +1,4 @@
-export function debounceAsync(func:Function, wait:number = 500):Function {  
+export function debounceAsync(this: any, func:Function, wait:number = 500):Function {  
     let timeout:number | undefined;  
     const context = this;
     return async function (...args:any[]) {  
