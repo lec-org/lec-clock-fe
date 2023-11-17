@@ -282,6 +282,10 @@ export const rankListColumns = [
     dataIndex: 'rank'
   },
   {
+    title:'用户名',
+    dataIndex:'nickname'
+  },
+  {
     title: '用户信息',
     dataIndex: 'userInfo',
     render: (row: RankListRow) => `<img src="${row.avatar}" alt="头像" style="width:50px; height:50px;border-radius:50%;"/>`
@@ -297,7 +301,7 @@ export const rankListColumns = [
   {
     title: '完成度',
     dataIndex: 'completionRate',
-    render: (row:RankListRow) => `${row.completionRate !==0?row.completionRate*100+'%':row.completionRate}`
+    render: (row:RankListRow) => `${row.completionRate !==0?Math.round(row.completionRate*100)+'%':row.completionRate}`
   },
   {
     title: '状态',

@@ -18,7 +18,7 @@ export const useLoginStore = defineStore('loginStore', () => {
     password: '',
     email:'',
     grade:1,
-    code:1
+    code:''
   })
 
   // 切换自动清空
@@ -32,7 +32,7 @@ export const useLoginStore = defineStore('loginStore', () => {
         password: '',
         email:'',
         grade:1,
-        code:0
+        code: ''
       }
     }
   })

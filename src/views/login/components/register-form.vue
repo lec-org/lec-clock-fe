@@ -116,17 +116,27 @@ import { userRegisterService, userCodeService } from '@/services'
 import { Message } from '@arco-design/web-vue';
 import { debounceAsync } from '@/services/debounce'
 
-import router from '@/router'
 const loginStore = useLoginStore()
 const { activeForm, registerInfo } = storeToRefs(loginStore)
+const { changeActiveForm } = loginStore
 const isActive = computed(() => activeForm.value === 'register')
 const checkToLogin = () => {
   activeForm.value = 'login'
 }
 const handleSubmit = async (info: Record<string, any>) => {
-  await userRegisterService(info)
-  Message.success('注册成功')
-  router.push('/')
+  const res = await userRegisterService(info)
+  console.log(res);
+  
+  if(res.error?.response?.data.code==200){
+    Message.success("注册成功")
+    changeActiveForm()
+  }else if(res.response?.data.code==200){
+    Message.success("注册成功")
+    changeActiveForm()
+  }else{
+    Message.error("注册失败")
+  }
+  
 }
 const debouncedRegister = debounceAsync(handleSubmit,500)
 
@@ -136,6 +146,7 @@ const sendEmail = async () => {
     Message.error('邮箱不能为空')
     return;
   }
+  Message.success('发送成功，让验证码飞一会')
   await userCodeService(email)
   //   console.log(res)
 }

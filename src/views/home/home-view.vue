@@ -22,12 +22,13 @@ const dataList:Ref<any[]> = ref<any>([])
 
 // 检查 token 是否存在
 const token = localStorage.getItem('token') || ''
+
 const checkToken = async () => {
     const res = await checkoutToken(token)
-    if(res.response?.data === false || res.error?.message === "网络错误"){
+    if(res.response?.code!==200){
         localStorage.removeItem("token")
         Message.error("token过期啦")
-        router.push('/login')
+        router.replace('/login')
     }
 }
 
@@ -120,7 +121,7 @@ const getCardList = async () => {
             </a-layout-content>
 
             <a-layout-footer>
-              <rank-list :userList="userList" :selfUser="selfUser"></rank-list>
+              <rank-list :userList="userList" :selfUser="selfUser" v-if="selfUser.grade!==0"></rank-list>
             </a-layout-footer>
 
             <a-layout-footer> </a-layout-footer>

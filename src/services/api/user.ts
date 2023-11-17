@@ -63,46 +63,30 @@ export const getUserInfoService =async ({
       }
     return await request.get(`/user/info/${id}`,config)  
 }
-//个人信息————保存昵称
-export const saveNameService = async({
-    name,
-    token
-}:Record<string,any>)=>{
-    return await request.post('/user/info/update',{
-        nickname:name
-    },{
+//个人信息————保存个人信息
+export const saveinfoService = async(name:any,signature:any,token:string)=>{
+    const config = {
         headers:{
             token:token
         }
-    })
-}
-//个人信息————保存个性签名
-export const saveSignatureService = async ({
-    signature,
-    token
-}:Record<string,any>)=>{
-    return await request.post('user/info/update',{
-        signature
-    },{
-        headers:{
-            token
-        }
-    })
+    }
+    const data = {
+        nickname:name,
+        signature:signature
+    }
+    return await request.put('/user/info/update',data,config)
 }
 
 // 上传头像
-export const uploadFileServices = async ({
-    file,
-    token
-}:Record<string,any>)=>{
-    const formData = new FormData()
-    formData.append('images',file)
-    const config = {
-        headers: {
-          token: token,
-        },
-      }
-    return await request.post('/user/upload',formData,config)
+export const uploadFileServices = async (file:any,token:string)=>{  
+    const formData = new FormData()  
+    formData.append('image',file) 
+    const config = {  
+        headers: {  
+          token: token,  
+        },  
+      }  
+    return await request.put('/user/upload',formData,config)  
 }
 
 // 查看打卡列表

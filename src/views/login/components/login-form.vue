@@ -105,7 +105,7 @@ const handleSubmit = async (info: Record<string, any>) => {
     const res = await userLoginService(info)
     console.log(res)
     if (res.error) {
-      if (res.error.message === '响应数据格式错误') {
+      if (res.error.code === 'ERR_TYPE_CHECK') {
         Message.error('账号或密码错误')
       } else {
         Message.error('登录失败：' + res.error.message)

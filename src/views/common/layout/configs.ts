@@ -46,7 +46,7 @@ export const avatarDropdownItems = [
     clickEvent: async () => {
       const token = localStorage.getItem('token')
       try {
-        await request.post('/api/user/logout', null, {
+        await request.post('/user/logout', null, {
           headers: {
             token
           }

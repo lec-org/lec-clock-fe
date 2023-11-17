@@ -5,6 +5,7 @@
                 <a-radio 
                 :value="grade.value" 
                 @click="handleGradeChange(grade.value)"
+                :checked="grade.value===selfUser.grade"
                 >
                     {{ grade.text }}
                 </a-radio>
@@ -39,7 +40,6 @@ const props = defineProps(['selfUser','userList'])
 const { selfUser } = props
 const { userList } = toRefs(props)
 
-
 // TODO: 临时mock数据，类型有一点点问题，调真实数据的时候记得改改
 const listData = ref<Array<RankListRow>>([])
 const toggleCurrentGradeData = ()=>{
@@ -65,7 +65,7 @@ const toggleCurrentGradeData = ()=>{
     })
 }
 //打开页面时加载
-watch(userList,toggleCurrentGradeData)
+watch(userList!,toggleCurrentGradeData)
 
 const handleGradeChange = async (grade: number) => {
     if (grade === selfUser.grade){
@@ -81,7 +81,7 @@ const handleGradeChange = async (grade: number) => {
     
     if(res.response?.code===200){
     listData.value = []
-        res.response.data.rows.forEach((item:User,index:number)=>{
+        res.response.data.rows.sort((a:User, b:User) => b.totalDuration - a.totalDuration).forEach((item:User,index:number)=>{
             let obj: RankListRow = {
             rank: 5,
             avatar: '',
@@ -94,8 +94,8 @@ const handleGradeChange = async (grade: number) => {
         obj.rank = index + 1
         obj.avatar = item.avatar
         obj.nickname = item.nickname
-        obj.currentTime = item.totalDuration
-        obj.targetTime = item.targetDuration
+        obj.currentTime = Number((item.totalDuration / 60).toFixed(1))
+        obj.targetTime = item.targetDuration /60
         obj.completionRate = Number((obj.currentTime / obj.targetTime).toFixed(2))
         obj.status = item.status
         listData.value.push(obj)

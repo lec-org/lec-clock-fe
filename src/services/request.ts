@@ -2,18 +2,17 @@ import axios, { AxiosRequestConfig, AxiosResponse, AxiosError } from 'axios'
 import { RequestResult } from './type'
 
 import { ResponseData } from './type'
-import { useLoginStore } from '../views/login/store/login'
 const instance = axios.create({
-  baseURL: '/api',
+  baseURL: 'http://47.108.119.44:8080/api',
   timeout: 5000
 })
 
 instance.interceptors.request.use(
   (config) => {
     // 添加逻辑
-    const useUser = useLoginStore() //在login/store
-    if (useUser.token) {
-      config.headers.Authorization = useUser.token
+    const token = localStorage.getItem('token') || "" //在login/store
+    if (token) {
+      config.headers.Authorization = token
     }
     return config
   },
@@ -28,6 +27,7 @@ instance.interceptors.response.use(
     if (result.code >= 200 && result.code < 300) {
       return response
     }
+    
     return Promise.reject(new RequestError(result.code, result.msg, response))
   },
   (error: AxiosError) => {
@@ -108,5 +108,21 @@ export const request = {
     }
 
     return result
-  }
+  },
+  async put<T = any>(url: string, data?: any, config?: AxiosRequestConfig) {  
+    const result: RequestResult<T> = {  
+      data: undefined  
+    }  
+  
+    try {  
+      const res = await instance.put<ResponseData<T>>(url, data, config)  
+      result.response = res.data  
+    } catch (err) {  
+      if (err instanceof RequestError) {  
+        result.error = err  
+      } 
+    }  
+  
+    return result  
+  },  
 }

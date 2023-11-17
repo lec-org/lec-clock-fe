@@ -29,7 +29,6 @@ const props = defineProps(['selfUser'])
 
 // eslint-disable-next-line vue/no-dupe-keys
 const { selfUser }  = props
-
 // 时区偏差修正
 const timeZoneOffset = -8 * 1000 * 60 * 60
 // TODO: 查询当前打卡状态
@@ -46,12 +45,20 @@ const startClockIn = async () => {
     isClocking.value = !isClocking.value
     selfUser.status = response.response?.data.status
     if(response.response?.data.status==1){
+        if(response.response?.code===405){
+            Message.error("打卡失败,打卡时间超过5h!!!!")
+            return;
+        }
         Message.success("成功上卡")
         singleInterval.value = setInterval(() => {
         clockingTime.value++
+        console.log(clockingTime.value)
       }, 1000)
+    }else if(response.response?.data==="打卡失败！！！，请在团队内打卡"){
+        Message.error('打卡失败！！！，请在团队内打卡')
     }else{
         console.log(response.response);
+        
         Message.success(`成功下卡，本周已经成功打卡${response.response?.data.totalDuration}分钟`)
         clearInterval(singleInterval.value)
         singleInterval.value = 0
@@ -66,12 +73,13 @@ const startClockIn = async () => {
 onMounted(()=>{
     isClocking.value = selfUser.status===1?true:false
 })
-watchEffect(()=>{
+watch(selfUser,()=>{
     isClocking.value = selfUser.status===1?true:false
     if(isClocking.value){
         singleInterval.value = setInterval(() => {
         clockingTime.value++
       }, 1000)
+      
     }
 })
 
