@@ -111,3 +111,12 @@ export const checkoutInfo = async({
     }
     return await request.get(`/clock/nowClock/${id}`,config)
 }
+
+export const getWeekClock = async(token:string) =>{
+    const config = {
+        headers:{
+            token
+        }
+    }
+    return await request.get(`clock/day`,config)
+}

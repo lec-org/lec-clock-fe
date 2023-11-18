@@ -27,7 +27,9 @@ instance.interceptors.response.use(
     if (result.code >= 200 && result.code < 300) {
       return response
     }
-    
+    if(result.code===401){
+        return Promise.reject(new RequestError(result.code, result.msg, response))
+    }
     return Promise.reject(new RequestError(result.code, result.msg, response))
   },
   (error: AxiosError) => {

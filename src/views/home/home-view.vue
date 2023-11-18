@@ -3,7 +3,7 @@ import { ref, onMounted } from 'vue'
 import BasicLayout from '@/views/common/layout/basic-layout.vue'
 import RankList from './components/rank-list.vue'
 import clockInfo from './components/clock-info.vue'
-import { checkoutToken } from '@/services'
+import { checkoutToken, getWeekClock } from '@/services'
 import router from '@/router'
 import { checkoutInfo, checkoutList, getUserInfoService } from '@/services'
 import { User } from './type/index'
@@ -21,6 +21,7 @@ const selfUser:User = reactive<User>({
 const dataList:Ref<any[]> = ref<any>([])
 
 // 检查 token 是否存在
+const weekClock:Ref<any[]> = ref<any>([])
 const token = localStorage.getItem('token') || ''
 
 const checkToken = async () => {
@@ -29,6 +30,13 @@ const checkToken = async () => {
         localStorage.removeItem("token")
         Message.error("token过期啦")
         router.replace('/login')
+    }
+    const res1 = await getWeekClock(token)
+    console.log(res1);
+    const data = res1.response?.data
+    const week = ['mon','tue','wed','thu','fri','sat','sun']
+    for(let i of week){
+        weekClock.value.push(data[i])
     }
 }
 
@@ -112,12 +120,12 @@ const getCardList = async () => {
         <div class="left">
           <a-layout>
             <a-layout-header class="header">
-              <clock-info :selfUser="selfUser" :dataList="dataList"/>
+              <clock-info :selfUser="selfUser" :dataList="dataList" :userList="userList"/>
             </a-layout-header>
 
             <a-layout-content class="content">
               <clock-button :selfUser="selfUser"/>
-              <line-chart />
+              <line-chart :weekClock="weekClock"/>
             </a-layout-content>
 
             <a-layout-footer>

@@ -42,9 +42,20 @@
 
 <script setup lang="ts">
 import { clockInfoDataList, weatherInfoList } from '../configs'
-const props = defineProps(['selfUser','dataList'])
+const props = defineProps(['selfUser','dataList','userList'])
 const selfUser = props.selfUser
+const { userList } = toRefs(props)
 
+watch(selfUser,()=>{
+    if(selfUser.targetDuration==0) return;
+    clockInfoDataList[0].maxValue = selfUser.targetDuration / 60
+})
+watch(userList!,()=>{
+    console.log(userList,'userList');
+    
+    if(userList?.value.length===0) return ;
+    clockInfoDataList[1].maxValue = userList?.value.length
+})
 </script>
 
 <style scoped lang="scss">

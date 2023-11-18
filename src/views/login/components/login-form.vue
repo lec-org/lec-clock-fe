@@ -114,7 +114,7 @@ const handleSubmit = async (info: Record<string, any>) => {
       loginStore.setToken(res.response?.data.token)
       loginStore.setId(res.response?.data.userInfoVo.id)
       Message.success('登录成功')
-      router.push('/home')
+      router.replace('/home')
     }
   } catch (error) {
     console.error(error)

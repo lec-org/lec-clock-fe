@@ -8,7 +8,7 @@ export const sidebarItems = [
     icon: 'icon-home',
     text: '工作台',
     clickEvent: () => {
-      router.push('/home')
+      router.replace('/home')
     }
   },
   {
@@ -36,7 +36,7 @@ export const avatarDropdownItems = [
     icon: 'icon-home',
     text: '个人设置',
     clickEvent: () => {
-      router.push('/user')
+      router.replace('/user')
     }
   },
   {
