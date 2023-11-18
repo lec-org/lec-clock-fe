@@ -30,7 +30,7 @@
 <script setup lang="ts">
 import { request } from '@/services/request'
 import { Message } from '@arco-design/web-vue'
-
+import axios from 'axios'
 const data = reactive({
   name: '',
   signature: '',
@@ -92,12 +92,12 @@ const saveSignature = () => {
         }
       }
     )
-    .then((response) => {
+    .then((response:any) => {
       alert('操作成功')
       console.log(response.data)
       // 可以在这里根据后端返回的数据更新前端的状态或做其他操作
     })
-    .catch((error) => {
+    .catch((error:any) => {
       console.error(error)
       // 可以在这里根据错误情况给出适当的提示或进行其他处理
     })

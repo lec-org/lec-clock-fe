@@ -77,12 +77,35 @@ const checkToRegister = () => {
     activeForm.value = 'register'
 }
 
+//记住我
+watch(isRemembered,()=>{
+    if(isRemembered.value===true){
+        localStorage.setItem('username',loginInfo.value.username)
+        localStorage.setItem('password',loginInfo.value.password)
+    }else{
+        let username = localStorage.getItem('username') || ""
+        if(username !== ""){
+            localStorage.removeItem('username')
+            localStorage.removeItem('password')
+        }
+    }
+})
+const initLoginInfo = ()=>{
+    loginInfo.value.username = localStorage.getItem('username') || ""
+    loginInfo.value.password = localStorage.getItem('password') || ""
+    if(loginInfo.value.username!==""){
+        isRemembered.value = true
+    }
+}
+initLoginInfo()
+
+
 const handleSubmit = async (info: Record<string, any>) => {
   try {
     const res = await userLoginService(info)
     console.log(res)
     if (res.error) {
-      if (res.error.message === '响应数据格式错误') {
+      if (res.error.code === 'ERR_TYPE_CHECK') {
         Message.error('账号或密码错误')
       } else {
         Message.error('登录失败：' + res.error.message)
@@ -91,14 +114,14 @@ const handleSubmit = async (info: Record<string, any>) => {
       loginStore.setToken(res.response?.data.token)
       loginStore.setId(res.response?.data.userInfoVo.id)
       Message.success('登录成功')
-      router.push('/home')
+      router.replace('/home')
     }
   } catch (error) {
     console.error(error)
     Message.error('登录失败：' + error)
   }
 }
-const debouncedLogin = debounceAsync(handleSubmit,1000)
+const debouncedLogin = debounceAsync(handleSubmit,500)
 
 </script>
 

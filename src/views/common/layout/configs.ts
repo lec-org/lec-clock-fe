@@ -8,7 +8,7 @@ export const sidebarItems = [
     icon: 'icon-home',
     text: '工作台',
     clickEvent: () => {
-      router.push('/home')
+      router.replace('/home')
     }
   },
   {
@@ -36,7 +36,7 @@ export const avatarDropdownItems = [
     icon: 'icon-home',
     text: '个人设置',
     clickEvent: () => {
-      router.push('/user')
+      router.replace('/user')
     }
   },
   {
@@ -46,7 +46,7 @@ export const avatarDropdownItems = [
     clickEvent: async () => {
       const token = localStorage.getItem('token')
       try {
-        await request.post('/api/user/logout', null, {
+        await request.post('/user/logout', null, {
           headers: {
             token
           }

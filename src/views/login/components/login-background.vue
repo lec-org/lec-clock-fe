@@ -22,12 +22,14 @@
 </template>
 
 <script lang="ts" setup>
+// @ts-ignore
 import lec3d from '@trickle/lec3d'
 import { ref, onMounted } from 'vue'
 
 const modelRef = ref()
 
 onMounted(() => {
+    
   const { scene, camera, mountTo, addControls } = lec3d.init()
   camera.position.set(-10, 1, 1000)
   camera.lookAt(0, 0, 0)

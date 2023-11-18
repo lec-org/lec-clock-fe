@@ -3,7 +3,7 @@ import { useLoginStore } from '@/views/login/store/login'
 const routes = [
   {
     path: '/',
-    redirect: '/login' // 后面改成往home跳转
+    redirect: '/home' // 后面改成往home跳转
   },
   {
     path: '/home',

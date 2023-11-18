@@ -37,7 +37,7 @@ import router from '@/router'
 import { avatarDropdownItems } from '../configs'
 
 const routeTo = (str: string) => {
-  router.push(str)
+  router.replace(str)
 }
 </script>
 
