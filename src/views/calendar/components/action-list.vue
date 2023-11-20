@@ -15,10 +15,22 @@
               <h5>{{ item.Type }}</h5>
             </template>
             <template #extra>
-              <a-link>查看详情</a-link>
+              <a-link @click="goToRelatedPlatform(item.Url)">查看详情</a-link>
             </template>
             <template #default>
-              {{ item }}
+              <template v-for="config in actionCard" :key="config.key">
+                <div class="meta">
+                  <div class="label">{{ config.label }}</div>
+                  <!-- TODO: 是的，这个地方写得很生草，后面的ts可以补补了 -->
+                  <div class="value">
+                    {{ 
+                      config.render ? 
+                      config.render((item as unknown as Record<string, string>)[config.key] as any)
+                      : (item as unknown as Record<string, string>)[config.key] 
+                    }}
+                  </div>
+                </div>
+              </template>
             </template>
           </a-card>
         </template>
@@ -32,9 +44,19 @@
 
 <script setup lang="ts">
 import { ActionDataList } from '../types'
+import { actionCard } from '../configs'
+import { Message } from '@arco-design/web-vue';
 const props = defineProps<{
   data: ActionDataList
 }>()
+
+const goToRelatedPlatform = (url:string) => {
+  try {
+    window.open(url)
+  } catch(err) {
+    Message.error('无效链接, 跳转失败')
+  }
+}
 </script>
 
 <style lang="scss" scoped>
@@ -64,7 +86,7 @@ const props = defineProps<{
     .card {
       width: 360px;
       flex-shrink: 0;
-      height: 200px;
+      height: 180px;
       cursor: pointer;
 
       &.empty {
@@ -76,5 +98,17 @@ const props = defineProps<{
     }
   }
 }
+.meta {
+  margin-bottom: 10px;
+  .label {
+    font-weight: 800;
+    margin-bottom: 4px;
+  }
+
+  .value {
+    text-wrap: nowrap;
+    text-overflow: ellipsis;
+    overflow: hidden;
+  }
+}
 </style>
-../types

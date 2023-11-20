@@ -44,6 +44,7 @@ declare module 'vue' {
     CalendarTable: typeof import('./../views/calendar/components/calendar-table.vue')['default']
     CanlendarTable: typeof import('./../views/calendar/components/canlendar-table.vue')['default']
     CardList: typeof import('./../views/calendar/components/card-list.vue')['default']
+    CellActions: typeof import('./../views/calendar/components/cell-actions.vue')['default']
     ClockButton: typeof import('./../views/home/components/clock-button.vue')['default']
     ClockIn: typeof import('./../views/home/components/clockIn.vue')['default']
     ClockInfo: typeof import('./../views/home/components/clock-info.vue')['default']
