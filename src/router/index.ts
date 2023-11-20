@@ -20,6 +20,10 @@ const routes = [
   {
     path: '/user/',
     component: () => import('@/views/user/user-view.vue')
+  },
+  {
+    path: '/calendar',
+    component: () => import('@/views/calendar/calendar-view.vue')
   }
 ]
 

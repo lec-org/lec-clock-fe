@@ -1,7 +1,7 @@
 <template>
-  <a-menu default-open-keys="['1']" :style="{ width: '100%' }">
+  <a-menu :default-open-keys="['1']" :style="{ width: '100%' }">
     <template v-for="item in sidebarItems" :key="item.key">
-      <a-menu-item @click="item.clickEvent" >
+      <a-menu-item @click="item.clickEvent">
         <component :is="item.icon"></component>
         {{ item.text }}
       </a-menu-item>
