@@ -21,7 +21,7 @@
 
 <script setup lang="ts">
 import { Message } from '@arco-design/web-vue'
-import { ref, onMounted, defineProps } from 'vue'
+import { ref, defineProps } from 'vue'
 import dayjs from 'dayjs'
 import { startClockInService } from '@/services';
 
@@ -44,12 +44,8 @@ const startClockIn = async () => {
         const response = await startClockInService(token)
         isClocking.value = !isClocking.value
         selfUser.status = response.response?.data.status
+        
         if (response.response?.data.status == 1) {
-            if (response.response?.code === 405) {
-                Message.error("打卡失败,打卡时间超过5h!!!!")
-                return;
-            }
-            console.log(response);
             Message.success("成功上卡")
             localStorage.setItem('beginTime', response.response?.data.beginTime);
             
@@ -58,9 +54,15 @@ const startClockIn = async () => {
             }, 1000)
         } else if (response.response?.data === "打卡失败！！！，请在团队内打卡") {
             Message.error('打卡失败！！！，请在团队内打卡')
-        } else {
+            return;
+        }else if(response.error?.response?.data.code===405){
+            Message.error("打卡失败,打卡时间超过5h!!!!")
+                return;
+        } 
+        else {
             console.log(response.response);
             Message.success(`成功下卡，本周已经成功打卡${response.response?.data.totalDuration}分钟`)
+            localStorage.removeItem('beginTime');
             clearInterval(singleInterval.value)
             singleInterval.value = 0
             clockingTime.value = timeZoneOffset
@@ -70,16 +72,15 @@ const startClockIn = async () => {
         console.error(error)
     }
 }
-let id = 0;
+let flag = false;
 
-watch(selfUser, () => {
-    id++;
+watch(()=> selfUser.status==1, () => {
     isClocking.value = selfUser.status == 1 ? true : false
     
     //防止开启多个定时器
-    if (isClocking.value && id==2) {
+    if (isClocking.value && !flag && !singleInterval.value) {
         clockingTime.value += Math.round(((new Date()).getTime() - (new Date(localStorage.getItem("beginTime") || "")).getTime())/1000)
-        
+        flag = true
         singleInterval.value = setInterval(() => {
             clockingTime.value++
         }, 1000)
