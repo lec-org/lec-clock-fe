@@ -12,7 +12,7 @@
 
                 <template #trigger-icon>
                     <IconEdit @click="uploadAvatar"/>
-                    <input type="file" ref="fileInput" style="display: none;" @change="handleFile">
+                    <input type="file" ref="fileInput" style="display: none;" onclick="handleFile">
                 </template>
             </a-avatar>
         </div>
@@ -37,7 +37,7 @@ const {selfUser} = props
 const fileInput = ref(null)
 const uploadAvatar = ()=>{
     if(fileInput.value){
-        fileInput.value.click()
+        fileInput.value?.click()
     }
 }
 let id = 0;

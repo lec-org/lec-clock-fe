@@ -37,6 +37,7 @@ declare module 'vue' {
     ATableColumn: typeof import('@arco-design/web-vue')['TableColumn']
     ATypographyParagraph: typeof import('@arco-design/web-vue')['TypographyParagraph']
     ATypographyText: typeof import('@arco-design/web-vue')['TypographyText']
+    AUpload: typeof import('@arco-design/web-vue')['Upload']
     BasicHeader: typeof import('./../views/common/layout/components/basic-header.vue')['default']
     BasicLeftSidebar: typeof import('./../views/common/layout/components/basic-left-sidebar.vue')['default']
     BasicRightSidebar: typeof import('./../views/common/layout/components/basic-right-sidebar.vue')['default']
