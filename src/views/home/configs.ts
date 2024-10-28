@@ -312,11 +312,15 @@ export const rankListColumns = [
 
 export const rankListGrades = [
   {
-    value: 2,
-    text: '2022级'
+    value: 1,
+    text: '2024级'
   },
   {
-    value:1,
+    value:2,
     text:'2023级'
+  },
+  {
+    value:3,
+    text:'2022级'
   }
 ]
