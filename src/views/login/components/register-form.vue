@@ -60,7 +60,8 @@
                 v-model="registerInfo.grade"
               >
                 <a-option :value="1">大一萌新</a-option>
-                <a-option :value="2">大二老东西</a-option>
+                <a-option :value="2">大二中登</a-option>
+                <a-option :value="3">大三老东西</a-option>
               </a-select>
             </a-form-item>
             <a-form-item
@@ -69,7 +70,7 @@
               :rules="[
                 { required: true, message: '邮箱是必填项' },
                 { type: 'email', message: '邮箱格式不正确' },
-                { minLength:1 ,message:'邮箱不能为空' }
+                { minLength: 1, message: '邮箱不能为空' }
               ]"
             >
               <a-input
@@ -99,12 +100,11 @@
             </a-button>
 
             <a-space class="login">
-                <div>注册完成?</div>
-                <a-link @click="checkToLogin">返回登陆</a-link>
+              <div>注册完成?</div>
+              <a-link @click="checkToLogin">返回登陆</a-link>
             </a-space>
           </a-space>
         </a-form>
-        
       </div>
     </div>
   </transition>
@@ -113,7 +113,7 @@
 <script setup lang="ts">
 import { useLoginStore } from '../store/login'
 import { userRegisterService, userCodeService } from '@/services'
-import { Message } from '@arco-design/web-vue';
+import { Message } from '@arco-design/web-vue'
 import { debounceAsync } from '@/services/debounce'
 
 const loginStore = useLoginStore()
@@ -125,32 +125,31 @@ const checkToLogin = () => {
 }
 const handleSubmit = async (info: Record<string, any>) => {
   const res = await userRegisterService(info)
-  console.log(res);
-  
-  if(res.error?.response?.data.code==200){
-    Message.success("注册成功")
+  console.log(res)
+
+  if (res.error?.response?.data.code == 200) {
+    Message.success('注册成功')
     changeActiveForm()
-  }else if(res.response?.data.code==200){
-    Message.success("注册成功")
+  } else if (res.response?.data.code == 200) {
+    Message.success('注册成功')
     changeActiveForm()
-  }else{
-    Message.error("注册失败")
+  } else {
+    Message.error('注册失败')
   }
-  
 }
-const debouncedRegister = debounceAsync(handleSubmit,500)
+const debouncedRegister = debounceAsync(handleSubmit, 500)
 
 const sendEmail = async () => {
   const { email } = unref(registerInfo)
-  if(email===''){
+  if (email === '') {
     Message.error('邮箱不能为空')
-    return;
+    return
   }
   Message.success('发送成功，让验证码飞一会')
   await userCodeService(email)
   //   console.log(res)
 }
-const debouncedEmail = debounceAsync(sendEmail,500)
+const debouncedEmail = debounceAsync(sendEmail, 500)
 </script>
 <style lang="scss">
 .register-form {
@@ -174,24 +173,24 @@ const debouncedEmail = debounceAsync(sendEmail,500)
     left: 96px;
     width: 420px;
     height: 710px;
-    .board{
-        min-height: 710px;
-        padding: 24px 32px;
-        border-radius: 36px;
-        background-color: #fff;
-        box-shadow: 2px 10px 20px #333e;
+    .board {
+      min-height: 710px;
+      padding: 24px 32px;
+      border-radius: 36px;
+      background-color: #fff;
+      box-shadow: 2px 10px 20px #333e;
 
-        .register-form__title{
-            text-align: center;
-            font-weight: 600;
-            margin-bottom: 12px;
-        }
-        .login{
-            width: 100%;
-            display: flex;
-            justify-content: center;  
-            max-height: 60px;
-        }
+      .register-form__title {
+        text-align: center;
+        font-weight: 600;
+        margin-bottom: 12px;
+      }
+      .login {
+        width: 100%;
+        display: flex;
+        justify-content: center;
+        max-height: 60px;
+      }
     }
   }
 

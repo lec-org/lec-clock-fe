@@ -18,7 +18,7 @@
     <a-table
       :data="listData"
       :pagination="false"
-      :scroll="{ y: 270 }"
+      :scroll="{ y: 540 }"
       class="table"
     >
       <template #columns>
